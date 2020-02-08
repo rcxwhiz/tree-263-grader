@@ -18,7 +18,10 @@ def py_grader(prob, hw):
 		hw_num = f'0{hw}'
 	key_folder = f'HW{key_num}Key'
 	key_file = f'HW{hw_num}_Problem{key_num}_key.py'
-	key_source_code = open(os.path.join(key_folder, key_file)).read()
+	try:
+		key_source_code = open(os.path.join(key_folder, key_file)).read()
+	except FileNotFoundError:
+		helper_tools.input.exit_msg(f'Please put {key_folder}/{key_file} inside {os.getcwd()}')
 	key_output = helper_tools.files.PyRunner().RUN_FILE_WRAPPER(os.path.join(key_folder, key_file), temp_out)
 
 	python_files = helper_tools.files.get_files(prob, 'py')
@@ -33,6 +36,7 @@ def py_grader(prob, hw):
 		run_counter += 1
 		run_files.append({'name': student_name, 'source': source_file, 'out': new_runner.RUN_FILE_WRAPPER(file, temp_out)})
 	print('')
+	os.remove(temp_out)
 
 	bad_reads = []
 	for student in run_files:
@@ -44,6 +48,8 @@ def py_grader(prob, hw):
 		print('Could not run:')
 		for student in bad_reads:
 			print(f'  {student}')
+
+	io_data = helper_tools.io_data.IOResults({'source': key_source_code, 'out': key_output}, run_files)
 
 
 def xlsx_grader(prob):
