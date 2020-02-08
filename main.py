@@ -1,15 +1,30 @@
+import os
 import sys
 
 import helper_tools
 
 
-def py_grader(prob):
+def py_grader(prob, hw):
 	print(f'Grading py problem {prob}')
+
+	temp_out = 'TEMP_OUPUT_JOSH_GRADER.txt'
+	if int(prob) > 9:
+		key_num = f'{prob}'
+	else:
+		key_num = f'0{prob}'
+	if int(hw) > 9:
+		hw_num = f'{hw}'
+	else:
+		hw_num = f'0{hw}'
+	key_folder = f'HW{key_num}Key'
+	key_file = f'HW{hw_num}_Problem{key_num}_key.py'
+	key_source_code = open(os.path.join(key_folder, key_file)).read()
+	key_output = helper_tools.files.PyRunner().RUN_FILE_WRAPPER(os.path.join(key_folder, key_file), temp_out)
+
 	python_files = helper_tools.files.get_files(prob, 'py')
 	run_files = []
 	run_counter = 1
 	for file in python_files:
-		temp_out = 'TEMP_OUPUT_JOSH_GRADER.txt'
 		student_name = f'{file.split("_")[1]} {file.split("_")[0]}'
 		source_file = open(file, 'r').read()
 
@@ -38,6 +53,6 @@ def xlsx_grader(prob):
 if __name__ == '__main__':
 	helper_tools.input.validate_args(sys.argv)
 	if sys.argv[2] == 'py':
-		py_grader(sys.argv[3])
+		py_grader(sys.argv[3], sys.argv[1])
 	if sys.argv[2] == 'xlsx':
 		xlsx_grader(sys.argv[3])

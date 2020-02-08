@@ -37,10 +37,12 @@ class PyRunner:
 	def RUN_A_FILE_IN(self, _FILE_IN_NAME_TO_RUN, _OUTPUT_FILE_NAME_AFTER_RUN):
 		_TEMPORARY_STDOUT_MARKER = sys.stdout
 		sys.stdout = open(_OUTPUT_FILE_NAME_AFTER_RUN, 'w')
+
 		try:
 			exec(open(_FILE_IN_NAME_TO_RUN).read().replace('input', 'REPLACED INPUT HERE'))
 			sys.stdout = _TEMPORARY_STDOUT_MARKER
 		except Exception:
+			temp = Exception
 			sys.stdout = _TEMPORARY_STDOUT_MARKER
 			open(_OUTPUT_FILE_NAME_AFTER_RUN, 'w').write(MY_CLASS_ERROR_MESSAGES['runtime issue'])
 
