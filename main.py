@@ -6,6 +6,7 @@ import matplotlib
 import helper_tools
 
 
+# TODO put this in its own class (inside tools) to avoid name collisions
 def run_file(file_name, out_file):
 	temp = sys.stdout
 	sys.stdout = open(out_file, 'w')
@@ -35,6 +36,7 @@ def py_grader(prob):
 		if student['out'] is None:
 			bad_reads += 1
 	print(f'There were {bad_reads} bad reads')
+	# TODO make this show the students who's code can't be run
 
 
 def xlsx_grader(prob):
