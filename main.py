@@ -83,7 +83,7 @@ def xlsx_grader(hw):
 
     for sheet_name in wb.sheetnames:
         arr = []
-        sheet = wb.get_sheet_by_name(name=sheet_name)
+        sheet = wb[sheet_name]
         for row in sheet.iter_rows():
             arr.append([])
             for cell in row:
@@ -97,7 +97,7 @@ def xlsx_grader(hw):
         student_sheet_builder = {}
         for sheet_name in wb.sheetnames:
             arr = []
-            sheet = wb.get_sheet_by_name(name=sheet_name)
+            sheet = wb[sheet_name]
             for row in sheet.iter_rows():
                 arr.append([])
                 for cell in row:

@@ -130,6 +130,7 @@ class Ui_MainWindow(object):
                 else:
                     setting_item = QtWidgets.QTableWidgetItem(str(key_arr[i][j]))
                 self.key_table.setItem(i, j, setting_item)
+        self.key_table.resizeColumnsToContents()
 
         self.student_table.setRowCount(len(stud_arr))
         self.student_table.setColumnCount(len(stud_arr[0]))
@@ -140,6 +141,7 @@ class Ui_MainWindow(object):
                 else:
                     setting_item = QtWidgets.QTableWidgetItem(str(stud_arr[i][j]))
                 self.student_table.setItem(i, j, setting_item)
+        self.student_table.resizeColumnsToContents()
 
 
 def xlsx_ui():

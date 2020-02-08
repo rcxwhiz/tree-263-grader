@@ -23,6 +23,11 @@ def validate_args(args):
             exit_msg(f'Valid arguments:\n'
                      f'[hw num] py [prob num]\n'
                      f'[hw num] xlsx')
+    elif len(args) == 1:
+        args.append(input('Enter the HW number: '))
+        args.append(input('Enter the HW type (py/xlsx): '))
+        if args[2] == 'py':
+            args.append(input('Enter the problem number: '))
     try:
         os.chdir(os.path.join(hw_directory, 'HW ' + args[1]))
     except FileNotFoundError:
