@@ -16,7 +16,7 @@ def run_file(file_name, out_file):
 	except Exception:
 		print(f'Could not read {file_name}')
 		sys.stdout = temp
-		return None
+		return 'COULD NOT READ'
 
 
 def py_grader(prob):
