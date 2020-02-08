@@ -36,7 +36,7 @@ def py_grader(prob, hw):
         print(f'\rRunning file {run_counter}        ', end='')
         run_counter += 1
         run_files.append(
-            {'name': student_name, 'source': source_file, 'out': new_runner.RUN_FILE_WRAPPER(file, temp_out)})
+            {'name': student_name, 'source': source_file, 'out': new_runner.RUN_FILE_WRAPPER(file, temp_out), 'file name': file})
     print('')
     os.remove(temp_out)
 
@@ -52,7 +52,7 @@ def py_grader(prob, hw):
             print(f'  {student}')
 
     io_data = helper_tools.io_data.IOResults()
-    io_data.populate({'source': key_source_code, 'out': key_output}, run_files)
+    io_data.populate({'source': key_source_code, 'out': key_output, 'file name': key_file}, run_files)
     assets.py_file.py_ui()
 
 

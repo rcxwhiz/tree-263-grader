@@ -88,8 +88,8 @@ class Ui_MainWindow(object):
         elif self.code_index >= self.io_data.num_students:
             self.code_index -= self.io_data.num_students
 
-        self.key_label.setText('Key')
-        self.student_label.setText(f'{self.io_data.students[self.code_index]["name"]} - {self.code_index + 1}/{self.io_data.num_students}')
+        self.key_label.setText(f'Key - {self.io_data.key["file name"]}')
+        self.student_label.setText(f'{self.io_data.students[self.code_index]["name"]} - {self.code_index + 1}/{self.io_data.num_students} - {self.io_data.students[self.code_index]["file name"]}')
 
         self.next_file_botton.setText(self.io_data.students[(self.code_index + 1) % self.io_data.num_students]['name'])
         self.previous_file_button.setText(self.io_data.students[self.code_index - 1]['name'])
