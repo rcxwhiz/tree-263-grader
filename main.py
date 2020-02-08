@@ -1,4 +1,3 @@
-import os
 import sys
 
 import helper_tools
@@ -15,13 +14,14 @@ def py_grader(prob):
 		source_file = open(file, 'r').read()
 
 		new_runner = helper_tools.files.PyRunner()
-		print(f'\rRunning file {run_counter}     ', end='')
+		print(f'\rRunning file {run_counter}        ', end='')
 		run_counter += 1
 		run_files.append({'name': student_name, 'source': source_file, 'out': new_runner.RUN_FILE_WRAPPER(file, temp_out)})
+	print('')
 
 	bad_reads = []
 	for student in run_files:
-		if student['out'] in helper_tools.files.MY_CLASS_ERROR_MESSAGES:
+		if student['out'] in helper_tools.files.MY_CLASS_ERROR_MESSAGES.values():
 			bad_reads.append(student['name'])
 	if len(bad_reads) == 0:
 		print('There were no bad runs')

@@ -2,9 +2,9 @@ import os
 import re
 import sys
 import threading
-import time
 
 import helper_tools
+
 MY_CLASS_ERROR_MESSAGES = {'runtime issue': 'COULD NOT RUN',
                            'timeout issue': 'TIMED OUT'}
 
@@ -25,29 +25,24 @@ def get_files(prob, ftype):
 class PyRunner:
 
 	def RUN_FILE_WRAPPER(self, _FILE_IN_NAME_TO_RUN, _OUTPUT_FILE_NAME_AFTER_RUN):
-		_STRING_RESULT_TO_RETURN = ''
-		_MY_THREAD = ThreadWithTrace(target=self.RUN_A_FILE_IN, args=(_FILE_IN_NAME_TO_RUN, _OUTPUT_FILE_NAME_AFTER_RUN, _STRING_RESULT_TO_RETURN))
+		_MY_THREAD = ThreadWithTrace(target=self.RUN_A_FILE_IN, args=(_FILE_IN_NAME_TO_RUN, _OUTPUT_FILE_NAME_AFTER_RUN))
 		_MY_THREAD.start()
-		time.sleep(2)
+		_MY_THREAD.join(2)
 		if _MY_THREAD.is_alive():
-			print('Tried to kill a thread')
 			_MY_THREAD.kill()
 			_MY_THREAD.join()
-			print(f'Thread alive: {_MY_THREAD.is_alive()}')
 			_STRING_RESULT_TO_RETURN = MY_CLASS_ERROR_MESSAGES['timeout issue']
-		return _STRING_RESULT_TO_RETURN
+		return open(_OUTPUT_FILE_NAME_AFTER_RUN, 'r').read()
 
-	def RUN_A_FILE_IN(self, _FILE_IN_NAME_TO_RUN, _OUTPUT_FILE_NAME_AFTER_RUN, _STRING_RESULT_TO_RETURN):
+	def RUN_A_FILE_IN(self, _FILE_IN_NAME_TO_RUN, _OUTPUT_FILE_NAME_AFTER_RUN):
 		_TEMPORARY_STDOUT_MARKER = sys.stdout
 		sys.stdout = open(_OUTPUT_FILE_NAME_AFTER_RUN, 'w')
 		try:
-			exec(open(_FILE_IN_NAME_TO_RUN).read())
+			exec(open(_FILE_IN_NAME_TO_RUN).read().replace('input', 'REPLACED INPUT HERE'))
 			sys.stdout = _TEMPORARY_STDOUT_MARKER
-			return open(_OUTPUT_FILE_NAME_AFTER_RUN, 'r').read()
 		except Exception:
-			print(f'Could not read {_FILE_IN_NAME_TO_RUN}')
 			sys.stdout = _TEMPORARY_STDOUT_MARKER
-			return MY_CLASS_ERROR_MESSAGES['runtime issue']
+			open(_OUTPUT_FILE_NAME_AFTER_RUN, 'w').write(MY_CLASS_ERROR_MESSAGES['runtime issue'])
 
 
 class ThreadWithTrace(threading.Thread):
