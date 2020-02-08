@@ -23,3 +23,25 @@ class IOResults(metaclass=IOResultsMeta):
         self.key = key
         self.students = students
         self.num_students = len(students)
+
+
+class ExcelResultsMeta(type):
+    _instance: Optional[ExcelResults] = None
+
+    def __call__(self) -> ExcelResults:
+        if self._instance is None:
+            self._instance = super().__call__()
+        return self._instance
+
+
+class ExcelResults(metaclass=ExcelResultsMeta):
+
+    def __init__(self):
+        self.key = None
+        self.students = None
+        self.num_students = None
+
+    def populate(self, key, students):
+        self.key = key
+        self.students = students
+        self.num_students = len(students)

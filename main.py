@@ -4,6 +4,7 @@ import sys
 import openpyexcel
 
 import assets.py_file
+import assets.xlsx_file
 import helper_tools
 
 
@@ -64,7 +65,7 @@ def xlsx_grader(hw):
     excel_files = []
     all_files = os.listdir('.')
     for file in all_files:
-        if file.endswith('xlsx') or file.endswith('xlx') or file.endswith('xls'):
+        if file.endswith('xlsx'):
             excel_files.append(file)
 
     if int(hw) > 9:
@@ -73,7 +74,7 @@ def xlsx_grader(hw):
         hw_num = f'0{hw}'
     key_folder = f'HW{hw_num}Key'
     key_file = f'HW{hw_num}_key.xlsx'
-    key_sheets = {}
+    key_sheets = {'file name': key_file, 'sheets': {}}
 
     try:
         wb = openpyexcel.load_workbook(os.path.join(key_folder, key_file), data_only=True)
@@ -87,20 +88,28 @@ def xlsx_grader(hw):
             arr.append([])
             for cell in row:
                 arr[-1].append(cell.value)
-        key_sheets[sheet_name] = arr
+        key_sheets['sheets'][sheet_name] = arr
 
-    # try:
-    #     wb = pd.read_excel(os.path.join(key_folder, key_file))
-    # except FileNotFoundError:
-    #     helper_tools.input.exit_msg(f'Please put {key_folder}/{key_file} inside {os.getcwd()}')
-    # for sheet_name in wb.sheetnames:
-    #     sheet = wb[sheet_name]
-    #     for i in range(100):
-    #         key_sheets.append([])
-    #         for j in range(100):
-    #             key_sheets[i].append(sheet.cell(row=i+1, column=j+1).value)
+    student_sheets = []
+    for student_file in excel_files:
 
-    print('done')
+        wb = openpyexcel.load_workbook(student_file, data_only=True)
+        student_sheet_builder = {}
+        for sheet_name in wb.sheetnames:
+            arr = []
+            sheet = wb.get_sheet_by_name(name=sheet_name)
+            for row in sheet.iter_rows():
+                arr.append([])
+                for cell in row:
+                    arr[-1].append(cell.value)
+            student_sheet_builder[sheet_name] = arr
+
+        student_name = f'{student_file.split("_")[1]} {student_file.split("_")[0]}'
+        student_sheets.append({'name': student_name, 'file name': student_file, 'sheets': student_sheet_builder})
+
+    excel_data = helper_tools.io_data.ExcelResults()
+    excel_data.populate(key_sheets, student_sheets)
+    assets.xlsx_file.xlsx_ui()
 
 
 if __name__ == '__main__':

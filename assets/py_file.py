@@ -63,7 +63,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("Tree 263 .py Grader", "Tree 263 .py Grader"))
+        MainWindow.setWindowTitle(_translate("Tree 263 py Grader", "Tree 263 py Grader"))
         self.key_label.setText(_translate("MainWindow", "TextLabel"))
         self.student_label.setText(_translate("MainWindow", "TextLabel"))
         self.previous_file_button.setText(_translate("MainWindow", "PushButton"))
