@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
 
+from PyQt5 import QtCore, QtWidgets
+
 # Form implementation generated from reading ui file 'pyfiles.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
-
-
-from PyQt5 import QtCore, QtWidgets
+import helper_tools
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+        self.code_index = 0
+        self.io_data = helper_tools.io_data.IOResults()
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1404, 882)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -55,16 +58,57 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
+        self.josh_hooks(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("Tree 263 .py Grader", "Tree 263 .py Grader"))
         self.key_label.setText(_translate("MainWindow", "TextLabel"))
         self.student_label.setText(_translate("MainWindow", "TextLabel"))
         self.previous_file_button.setText(_translate("MainWindow", "PushButton"))
         self.next_file_botton.setText(_translate("MainWindow", "PushButton"))
 
+    def josh_hooks(self, MainWindow):
+        self.previous_file_button.clicked.connect(self.move_page_back)
+        self.next_file_botton.clicked.connect(self.move_page_forward)
+        self.update_page()
+
+    def move_page_back(self):
+        self.code_index -= 1
+        self.update_page()
+
+    def move_page_forward(self):
+        self.code_index += 1
+        self.update_page()
+
+    def update_page(self):
+        if self.code_index < 0:
+            self.code_index += self.io_data.num_students
+        elif self.code_index >= self.io_data.num_students:
+            self.code_index -= self.io_data.num_students
+
+        self.key_label.setText('Key')
+        self.student_label.setText(f'{self.io_data.students[self.code_index]["name"]} - {self.code_index + 1}/{self.io_data.num_students}')
+
+        self.next_file_botton.setText(self.io_data.students[(self.code_index + 1) % self.io_data.num_students]['name'])
+        self.previous_file_button.setText(self.io_data.students[self.code_index - 1]['name'])
+
+        self.key_source_display.setText(self.io_data.key['source'])
+        self.key_out_display.setText(self.io_data.key['out'])
+        self.student_source_display.setText(self.io_data.students[self.code_index]['source'])
+        self.student_out_display.setText(self.io_data.students[self.code_index]['out'])
+
+
+
+def py_ui():
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
 
 if __name__ == "__main__":
     import sys
