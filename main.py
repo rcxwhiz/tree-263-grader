@@ -8,12 +8,15 @@ def py_grader(prob):
 	print(f'Grading py problem {prob}')
 	python_files = helper_tools.files.get_files(prob, 'py')
 	run_files = []
+	run_counter = 1
 	for file in python_files:
 		temp_out = 'TEMP_OUPUT_JOSH_GRADER.txt'
 		student_name = f'{file.split("_")[1]} {file.split("_")[0]}'
 		source_file = open(file, 'r').read()
 
 		new_runner = helper_tools.files.PyRunner()
+		print(f'\rRunning file {run_counter}     ', end='')
+		run_counter += 1
 		run_files.append({'name': student_name, 'source': source_file, 'out': new_runner.RUN_FILE_WRAPPER(file, temp_out)})
 
 	bad_reads = []
