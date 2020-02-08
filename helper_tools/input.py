@@ -14,7 +14,7 @@ def exit_msg(msg):
 
 def validate_args(args):
 	if len(args) != 4:
-		exit_msg(f'Arguments should be [hw num] {supported_files} [prob num]')
+		exit_msg(f'Arguments should be [hw num] [{"/".join(supported_files)}] [prob num]')
 	if args[2] not in supported_files:
 		exit_msg(f'File formats supported: {" ".join(supported_files)}')
 	try:

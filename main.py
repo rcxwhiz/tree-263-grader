@@ -5,6 +5,8 @@ import helper_tools
 
 def py_grader(prob):
 	print(f'Grading py problem {prob}')
+	python_files = helper_tools.files.get_files(prob, 'py')
+	print(python_files)
 
 
 def xlsx_grader(prob):
