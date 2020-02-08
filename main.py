@@ -1,23 +1,7 @@
 import os
 import sys
-import numpy as np
-import matplotlib
 
 import helper_tools
-
-
-# TODO put this in its own class (inside tools) to avoid name collisions
-def run_file(file_name, out_file):
-	temp = sys.stdout
-	sys.stdout = open(out_file, 'w')
-	try:
-		exec(open(file_name).read())
-		sys.stdout = temp
-		return open(out_file, 'r').read()
-	except Exception:
-		print(f'Could not read {file_name}')
-		sys.stdout = temp
-		return 'COULD NOT READ'
 
 
 def py_grader(prob):
@@ -29,14 +13,19 @@ def py_grader(prob):
 		student_name = f'{file.split("_")[1]} {file.split("_")[0]}'
 		source_file = open(file, 'r').read()
 
-		run_files.append({'name': student_name, 'source': source_file, 'out': run_file(file, temp_out)})
+		new_runner = helper_tools.files.PyRunner()
+		run_files.append({'name': student_name, 'source': source_file, 'out': new_runner.RUN_FILE_WRAPPER(file, temp_out)})
 
-	bad_reads = 0
+	bad_reads = []
 	for student in run_files:
-		if student['out'] is None:
-			bad_reads += 1
-	print(f'There were {bad_reads} bad reads')
-	# TODO make this show the students who's code can't be run
+		if student['out'] in helper_tools.files.MY_CLASS_ERROR_MESSAGES:
+			bad_reads.append(student['name'])
+	if len(bad_reads) == 0:
+		print('There were no bad runs')
+	else:
+		print('Could not run:')
+		for student in bad_reads:
+			print(f'  {student}')
 
 
 def xlsx_grader(prob):
