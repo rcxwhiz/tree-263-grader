@@ -1,6 +1,8 @@
 import os
 import sys
 
+import openpyexcel
+
 import assets.py_file
 import helper_tools
 
@@ -56,8 +58,49 @@ def py_grader(prob, hw):
     assets.py_file.py_ui()
 
 
-def xlsx_grader(prob):
-    print(f'Grading xlsx problem {prob}')
+def xlsx_grader(hw):
+    print('Grading xlsx')
+
+    excel_files = []
+    all_files = os.listdir('.')
+    for file in all_files:
+        if file.endswith('xlsx') or file.endswith('xlx') or file.endswith('xls'):
+            excel_files.append(file)
+
+    if int(hw) > 9:
+        hw_num = f'{hw}'
+    else:
+        hw_num = f'0{hw}'
+    key_folder = f'HW{hw_num}Key'
+    key_file = f'HW{hw_num}_key.xlsx'
+    key_sheets = {}
+
+    try:
+        wb = openpyexcel.load_workbook(os.path.join(key_folder, key_file), data_only=True)
+    except FileNotFoundError:
+        helper_tools.input.exit_msg(f'Please put {key_folder}/{key_file} inside {os.getcwd()}')
+
+    for sheet_name in wb.sheetnames:
+        arr = []
+        sheet = wb.get_sheet_by_name(name=sheet_name)
+        for row in sheet.iter_rows():
+            arr.append([])
+            for cell in row:
+                arr[-1].append(cell.value)
+        key_sheets[sheet_name] = arr
+
+    # try:
+    #     wb = pd.read_excel(os.path.join(key_folder, key_file))
+    # except FileNotFoundError:
+    #     helper_tools.input.exit_msg(f'Please put {key_folder}/{key_file} inside {os.getcwd()}')
+    # for sheet_name in wb.sheetnames:
+    #     sheet = wb[sheet_name]
+    #     for i in range(100):
+    #         key_sheets.append([])
+    #         for j in range(100):
+    #             key_sheets[i].append(sheet.cell(row=i+1, column=j+1).value)
+
+    print('done')
 
 
 if __name__ == '__main__':
@@ -65,4 +108,4 @@ if __name__ == '__main__':
     if sys.argv[2] == 'py':
         py_grader(sys.argv[3], sys.argv[1])
     if sys.argv[2] == 'xlsx':
-        xlsx_grader(sys.argv[3])
+        xlsx_grader(sys.argv[1])
