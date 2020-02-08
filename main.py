@@ -6,7 +6,11 @@ import helper_tools
 def py_grader(prob):
 	print(f'Grading py problem {prob}')
 	python_files = helper_tools.files.get_files(prob, 'py')
-	print(python_files)
+	run_files = []
+	for file in python_files:
+		student_name = f'{file.split("_")[1]} {file.split("_")[0]}'
+		source_file = open(file, 'r').read()
+		run_files.append({'name': student_name, 'source': source_file})
 
 
 def xlsx_grader(prob):
