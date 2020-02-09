@@ -5,8 +5,9 @@ import threading
 
 import helper_tools
 
-MY_CLASS_ERROR_MESSAGES = {'runtime issue': 'COULD NOT RUN',
-                           'timeout issue': 'TIMED OUT'}
+MY_CLASS_ERROR_MESSAGES = {'runtime issue': '[RUNTIME ISSUE]',
+                           'timeout issue': '[TIMEOUT ISSUE]',
+                           'input issue': '[USED INPUT]'}
 
 
 def get_files(prob, ftype):
@@ -29,7 +30,7 @@ class PyRunner:
         _MY_THREAD = ThreadWithTrace(target=self.RUN_A_FILE_IN,
                                      args=(_FILE_IN_NAME_TO_RUN, _OUTPUT_FILE_NAME_AFTER_RUN))
         _MY_THREAD.start()
-        _MY_THREAD.join(2)
+        _MY_THREAD.join(1)
         while _MY_THREAD.is_alive():
             _MY_THREAD.kill()
             open(_OUTPUT_FILE_NAME_AFTER_RUN, 'a').write(MY_CLASS_ERROR_MESSAGES['timeout issue'])
@@ -40,8 +41,13 @@ class PyRunner:
         _TEMPORARY_STDOUT_MARKER = sys.stdout
         sys.stdout = open(_OUTPUT_FILE_NAME_AFTER_RUN, 'w')
 
+        _FILE_ABOUT_TO_RUN = open(_FILE_IN_NAME_TO_RUN).read()
+        if 'input' in _FILE_ABOUT_TO_RUN:
+            open(_OUTPUT_FILE_NAME_AFTER_RUN, 'w').write(MY_CLASS_ERROR_MESSAGES['input issue'])
+            sys.stdout = _TEMPORARY_STDOUT_MARKER
+            return None
         try:
-            exec(open(_FILE_IN_NAME_TO_RUN).read().replace('input', 'REPLACED INPUT HERE'))
+            exec(_FILE_ABOUT_TO_RUN)
             sys.stdout = _TEMPORARY_STDOUT_MARKER
         except Exception:
             sys.stdout = _TEMPORARY_STDOUT_MARKER

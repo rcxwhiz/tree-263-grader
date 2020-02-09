@@ -36,12 +36,12 @@ def py_grader(prob, hw):
         source_file = open(file, 'r').read()
 
         new_runner = helper_tools.files.PyRunner()
-        print(f'\rRunning file {run_counter}        ', end='')
+        print(f'{run_counter}) {file}')
         run_counter += 1
         run_files.append(
             {'name': student_name, 'source': source_file, 'out': new_runner.RUN_FILE_WRAPPER(file, temp_out), 'file name': file})
     print('')
-    #os.remove(temp_out)
+    # os.remove(temp_out)
 
     bad_reads = []
     for student in run_files:
@@ -114,7 +114,13 @@ def xlsx_grader(hw):
 
 if __name__ == '__main__':
     helper_tools.input.validate_args(sys.argv)
+    out_ref = sys.stdout
     if sys.argv[2] == 'py':
-        py_grader(sys.argv[3], sys.argv[1])
+        try:
+            py_grader(sys.argv[3], sys.argv[1])
+        except PermissionError:
+            sys.stdout = out_ref
+            helper_tools.input.exit_msg('Could not close temp out file - A file is timing out')
+
     if sys.argv[2] == 'xlsx':
         xlsx_grader(sys.argv[1])

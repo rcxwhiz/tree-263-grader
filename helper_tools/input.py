@@ -6,7 +6,7 @@ hw_directory = r'C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA'
 
 
 def exit_msg(msg):
-    print('[ERROR]')
+    print('\n[ERROR]')
     print(msg)
     input('Press any key to exit...')
     sys.exit()
