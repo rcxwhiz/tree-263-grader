@@ -21,7 +21,10 @@ def py_grader(prob, hw):
     except FileNotFoundError:
         helper_tools.input.exit_msg(f'Please put {key_folder}/{key_file} inside {os.getcwd()}')
 
-    key_output = helper_tools.files.run_a_file(os.path.join(key_folder, key_file), temp_out)
+    if 'input' in key_source_code:
+        key_output = 'Terminated for using input'
+    else:
+        key_output = helper_tools.files.run_a_file(os.path.join(key_folder, key_file), temp_out)
 
     student_python_files = helper_tools.files.get_files(prob, 'py')
     run_files = []
@@ -83,12 +86,8 @@ def xlsx_grader(hw):
         if file.endswith('xlsx'):
             excel_files.append(file)
 
-    if int(hw) > 9:
-        hw_num = f'{hw}'
-    else:
-        hw_num = f'0{hw}'
-    key_folder = f'HW{hw_num}Key'
-    key_file = f'HW{hw_num}_key.xlsx'
+    key_folder = f'HW{hw}Key'
+    key_file = f'HW{hw}_key.xlsx'
     key_sheets = {'file name': key_file, 'sheets': {}}
 
     try:
