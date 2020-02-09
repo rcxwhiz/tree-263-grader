@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import threading
+import math
 
 import helper_tools
 
@@ -42,21 +43,21 @@ class PyRunner:
         return open(_OUTPUT_FILE_NAME_AFTER_RUN, 'r').read()
 
     def RUN_A_FILE_IN(self, _FILE_IN_NAME_TO_RUN, _OUTPUT_FILE_NAME_AFTER_RUN):
-        _TEMPORARY_STDOUT_MARKER = sys.stdout
         sys.stdout = open(_OUTPUT_FILE_NAME_AFTER_RUN, 'w')
 
         _FILE_ABOUT_TO_RUN = open(_FILE_IN_NAME_TO_RUN).read()
         if 'input' in _FILE_ABOUT_TO_RUN:
             open(_OUTPUT_FILE_NAME_AFTER_RUN, 'w').write(MY_CLASS_ERROR_MESSAGES['input issue'])
             print(MY_CLASS_ERROR_MESSAGES['input issue'], file=self.io_data.stdout_ref)
-            sys.stdout = _TEMPORARY_STDOUT_MARKER
+            sys.stdout = self.io_data.stdout_ref
             return None
         try:
             exec(_FILE_ABOUT_TO_RUN)
-            sys.stdout = _TEMPORARY_STDOUT_MARKER
-        except Exception:
-            sys.stdout = _TEMPORARY_STDOUT_MARKER
-            open(_OUTPUT_FILE_NAME_AFTER_RUN, 'w').write(MY_CLASS_ERROR_MESSAGES['runtime issue'])
+            sys.stdout = self.io_data.stdout_ref
+        except Exception as BAD_NUTT:
+            print('ERROR HERE ->', BAD_NUTT.args[0], file=self.io_data.stdout_ref)
+            sys.stdout = self.io_data.stdout_ref
+            open(_OUTPUT_FILE_NAME_AFTER_RUN, 'a').write(BAD_NUTT.args[0])
             print(MY_CLASS_ERROR_MESSAGES['runtime issue'], file=self.io_data.stdout_ref)
 
 

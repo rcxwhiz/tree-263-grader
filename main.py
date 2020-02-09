@@ -14,16 +14,8 @@ def py_grader(prob, hw):
     io_data.set_stdout_ref(sys.stdout)
 
     temp_out = 'TEMP_OUPUT_JOSH_GRADER.txt'
-    if int(prob) > 9:
-        key_num = f'{prob}'
-    else:
-        key_num = f'0{prob}'
-    if int(hw) > 9:
-        hw_num = f'{hw}'
-    else:
-        hw_num = f'0{hw}'
-    key_folder = f'HW{key_num}Key'
-    key_file = f'HW{hw_num}_Problem{key_num}_key.py'
+    key_folder = f'HW{hw}Key'
+    key_file = f'HW{hw}_Problem{prob}_key.py'
     try:
         key_source_code = open(os.path.join(key_folder, key_file)).read()
     except FileNotFoundError:
@@ -35,7 +27,12 @@ def py_grader(prob, hw):
     run_counter = 1
     for file in python_files:
         student_name = f'{file.split("_")[1]} {file.split("_")[0]}'
-        source_file = open(file, 'r').read()
+        try:
+            source_file = open(file, 'r').read()
+        except UnicodeDecodeError:
+            run_files.append(
+                {'name': student_name, 'source': '[UNICODE DECODE ERROR]', 'out': '[UNICODE DECODE ERROR]',
+                 'file name': file})
 
         new_runner = helper_tools.files.PyRunner()
         print(f'{run_counter}) {file}', file=io_data.stdout_ref)

@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 
 supported_files = ['py', 'xlsx']
 hw_directory = r'C:\Users\josh-laptop\OneDrive\School\CH EN 263 TA'
@@ -10,6 +11,10 @@ def exit_msg(msg):
     print(msg)
     input('Press any key to exit...')
     sys.exit()
+
+
+def remove_zeros(name):
+    return re.sub(r'0+(\d)', r'\1', name)
 
 
 def validate_args(args):
@@ -39,6 +44,13 @@ def validate_args(args):
             os.chdir(cdir)
             print(f'Finding hw files in:\n'
                   f'{os.getcwd()}')
+
+            for file_name in os.listdir('.'):
+                os.rename(file_name, remove_zeros(file_name))
+            key_dir = os.path.join(f'HW{args[1]}Key')
+            for file_name in os.listdir(key_dir):
+                os.rename(os.path.join(key_dir, file_name), os.path.join(key_dir, remove_zeros(file_name)))
+
             return None
     exit_msg(f'Unable to find a Gradebook Bundled Download folder in:\n'
              f'{os.getcwd()}')
