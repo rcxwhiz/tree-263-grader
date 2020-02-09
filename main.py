@@ -41,7 +41,7 @@ def py_grader(prob, hw):
         run_files.append(
             {'name': student_name, 'source': source_file, 'out': new_runner.RUN_FILE_WRAPPER(file, temp_out), 'file name': file})
     print('')
-    os.remove(temp_out)
+    #os.remove(temp_out)
 
     bad_reads = []
     for student in run_files:

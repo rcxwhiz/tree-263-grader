@@ -30,10 +30,10 @@ class PyRunner:
                                      args=(_FILE_IN_NAME_TO_RUN, _OUTPUT_FILE_NAME_AFTER_RUN))
         _MY_THREAD.start()
         _MY_THREAD.join(2)
-        if _MY_THREAD.is_alive():
+        while _MY_THREAD.is_alive():
             _MY_THREAD.kill()
+            open(_OUTPUT_FILE_NAME_AFTER_RUN, 'a').write(MY_CLASS_ERROR_MESSAGES['timeout issue'])
             _MY_THREAD.join()
-            _STRING_RESULT_TO_RETURN = MY_CLASS_ERROR_MESSAGES['timeout issue']
         return open(_OUTPUT_FILE_NAME_AFTER_RUN, 'r').read()
 
     def RUN_A_FILE_IN(self, _FILE_IN_NAME_TO_RUN, _OUTPUT_FILE_NAME_AFTER_RUN):
@@ -43,7 +43,6 @@ class PyRunner:
         try:
             exec(open(_FILE_IN_NAME_TO_RUN).read().replace('input', 'REPLACED INPUT HERE'))
             sys.stdout = _TEMPORARY_STDOUT_MARKER
-        # TODO could be checking to see what the problem was here
         except Exception:
             sys.stdout = _TEMPORARY_STDOUT_MARKER
             open(_OUTPUT_FILE_NAME_AFTER_RUN, 'w').write(MY_CLASS_ERROR_MESSAGES['runtime issue'])
