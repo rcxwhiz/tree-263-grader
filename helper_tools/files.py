@@ -26,6 +26,9 @@ def get_files(prob, ftype):
 
 class PyRunner:
 
+    def __init__(self):
+        self.io_data = helper_tools.io_data.IOResults()
+
     def RUN_FILE_WRAPPER(self, _FILE_IN_NAME_TO_RUN, _OUTPUT_FILE_NAME_AFTER_RUN):
         _MY_THREAD = ThreadWithTrace(target=self.RUN_A_FILE_IN,
                                      args=(_FILE_IN_NAME_TO_RUN, _OUTPUT_FILE_NAME_AFTER_RUN))
@@ -34,6 +37,7 @@ class PyRunner:
         while _MY_THREAD.is_alive():
             _MY_THREAD.kill()
             open(_OUTPUT_FILE_NAME_AFTER_RUN, 'a').write(MY_CLASS_ERROR_MESSAGES['timeout issue'])
+            print(MY_CLASS_ERROR_MESSAGES['timeout issue'], file=self.io_data.stdout_ref)
             _MY_THREAD.join()
         return open(_OUTPUT_FILE_NAME_AFTER_RUN, 'r').read()
 
@@ -44,6 +48,7 @@ class PyRunner:
         _FILE_ABOUT_TO_RUN = open(_FILE_IN_NAME_TO_RUN).read()
         if 'input' in _FILE_ABOUT_TO_RUN:
             open(_OUTPUT_FILE_NAME_AFTER_RUN, 'w').write(MY_CLASS_ERROR_MESSAGES['input issue'])
+            print(MY_CLASS_ERROR_MESSAGES['input issue'], file=self.io_data.stdout_ref)
             sys.stdout = _TEMPORARY_STDOUT_MARKER
             return None
         try:
@@ -52,6 +57,7 @@ class PyRunner:
         except Exception:
             sys.stdout = _TEMPORARY_STDOUT_MARKER
             open(_OUTPUT_FILE_NAME_AFTER_RUN, 'w').write(MY_CLASS_ERROR_MESSAGES['runtime issue'])
+            print(MY_CLASS_ERROR_MESSAGES['runtime issue'], file=self.io_data.stdout_ref)
 
 
 class ThreadWithTrace(threading.Thread):

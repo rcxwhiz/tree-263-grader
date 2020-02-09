@@ -9,7 +9,9 @@ import helper_tools
 
 
 def py_grader(prob, hw):
-    print(f'Grading py problem {prob}')
+    print(f'Grading py problem {prob}\n')
+    io_data = helper_tools.io_data.IOResults()
+    io_data.set_stdout_ref(sys.stdout)
 
     temp_out = 'TEMP_OUPUT_JOSH_GRADER.txt'
     if int(prob) > 9:
@@ -36,11 +38,12 @@ def py_grader(prob, hw):
         source_file = open(file, 'r').read()
 
         new_runner = helper_tools.files.PyRunner()
-        print(f'{run_counter}) {file}')
+        print(f'{run_counter}) {file}', file=io_data.stdout_ref)
         run_counter += 1
         run_files.append(
             {'name': student_name, 'source': source_file, 'out': new_runner.RUN_FILE_WRAPPER(file, temp_out), 'file name': file})
-    print('')
+    sys.stdout = io_data.stdout_ref
+    print('Complete')
     # os.remove(temp_out)
 
     bad_reads = []
@@ -54,7 +57,6 @@ def py_grader(prob, hw):
         for student in bad_reads:
             print(f'  {student}')
 
-    io_data = helper_tools.io_data.IOResults()
     io_data.populate({'source': key_source_code, 'out': key_output, 'file name': key_file}, run_files)
     assets.py_file.py_ui()
 

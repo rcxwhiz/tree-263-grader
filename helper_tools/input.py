@@ -2,7 +2,7 @@ import os
 import sys
 
 supported_files = ['py', 'xlsx']
-hw_directory = r'C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA'
+hw_directory = r'C:\Users\josh-laptop\OneDrive\School\CH EN 263 TA'
 
 
 def exit_msg(msg):

@@ -24,6 +24,9 @@ class IOResults(metaclass=IOResultsMeta):
         self.students = students
         self.num_students = len(students)
 
+    def set_stdout_ref(self, ref):
+        self.stdout_ref = ref
+
 
 class ExcelResultsMeta(type):
     _instance: Optional[ExcelResults] = None
