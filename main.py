@@ -1,6 +1,6 @@
 import os
 import sys
-
+import multiprocessing
 import openpyexcel
 
 import assets.py_file
@@ -20,39 +20,55 @@ def py_grader(prob, hw):
         key_source_code = open(os.path.join(key_folder, key_file)).read()
     except FileNotFoundError:
         helper_tools.input.exit_msg(f'Please put {key_folder}/{key_file} inside {os.getcwd()}')
-    key_output = helper_tools.files.PyRunner().RUN_FILE_WRAPPER(os.path.join(key_folder, key_file), temp_out)
 
-    python_files = helper_tools.files.get_files(prob, 'py')
+    key_output = helper_tools.files.run_a_file(os.path.join(key_folder, key_file), temp_out)
+
+    student_python_files = helper_tools.files.get_files(prob, 'py')
     run_files = []
     run_counter = 1
-    for file in python_files:
+    for file in student_python_files:
         student_name = f'{file.split("_")[1]} {file.split("_")[0]}'
         try:
             source_file = open(file, 'r').read()
         except UnicodeDecodeError:
-            run_files.append(
-                {'name': student_name, 'source': '[UNICODE DECODE ERROR]', 'out': '[UNICODE DECODE ERROR]',
-                 'file name': file})
+            run_files.append({'name': student_name,
+                              'source': '[UNICODE DECODE ERROR]',
+                              'out': '[UNICODE DECODE ERROR]',
+                              'file name': file})
+            continue
 
-        new_runner = helper_tools.files.PyRunner()
-        print(f'{run_counter}) {file}', file=io_data.stdout_ref)
+        print(f'{run_counter}) {file}')
         run_counter += 1
-        run_files.append(
-            {'name': student_name, 'source': source_file, 'out': new_runner.RUN_FILE_WRAPPER(file, temp_out), 'file name': file})
-    sys.stdout = io_data.stdout_ref
-    print('Complete')
-    # os.remove(temp_out)
 
-    bad_reads = []
-    for student in run_files:
-        if student['out'] in helper_tools.files.MY_CLASS_ERROR_MESSAGES.values():
-            bad_reads.append(student['name'])
-    if len(bad_reads) == 0:
-        print('There were no bad runs')
-    else:
-        print('Could not run:')
-        for student in bad_reads:
-            print(f'  {student}')
+        if 'input' in source_file:
+            open(temp_out, 'w').write('Terminated for using input')
+        else:
+            student_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file, args=(file, temp_out))
+            student_run_p.start()
+            student_run_p.join(helper_tools.input.program_time_allowed)
+            if student_run_p.is_alive():
+                print(f'Terminating {file}')
+                student_run_p.terminate()
+                student_run_p.join()
+
+        run_files.append({'name': student_name,
+                          'source': source_file,
+                          'out': open(temp_out, 'r').read(),
+                          'file name': file})
+        # os.remove(temp_out)
+    # sys.stdout = io_data.stdout_ref
+    print('Complete')
+
+    # bad_reads = []
+    # for student in run_files:
+    #     if student['out'] in helper_tools.files.MY_CLASS_ERROR_MESSAGES.values():
+    #         bad_reads.append(student['name'])
+    # if len(bad_reads) == 0:
+    #     print('There were no bad runs')
+    # else:
+    #     print('Could not run:')
+    #     for student in bad_reads:
+    #         print(f'  {student}')
 
     io_data.populate({'source': key_source_code, 'out': key_output, 'file name': key_file}, run_files)
     assets.py_file.py_ui()

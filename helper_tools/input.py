@@ -4,6 +4,7 @@ import re
 
 supported_files = ['py', 'xlsx']
 hw_directory = r'C:\Users\josh-laptop\OneDrive\School\CH EN 263 TA'
+program_time_allowed = 2
 
 
 def exit_msg(msg):
