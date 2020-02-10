@@ -102,6 +102,10 @@ if __name__ == '__main__':
                 print(f'{run_counter}) {file}')
                 run_counter += 1
 
+                # stderr_ref = sys.stderr
+                # sys.stderr = open(README.temprary_error_out_name, 'w')
+                # print('BIG TEST', file=sys.stderr)
+
                 if 'input' in source_file:
                     open(README.temprary_out_file_name, 'w').write('Terminated for using input')
                 else:
@@ -110,6 +114,8 @@ if __name__ == '__main__':
                     student_run_p.join(README.student_program_time_allowed)
                     student_run_p.terminate()
                     student_run_p.join()
+                sys.stderr.close()
+                # sys.stderr = stderr_ref
 
                 output_to_append = open(README.temprary_out_file_name, 'r').read()
                 if README.code_running_method == 2:

@@ -1,7 +1,6 @@
 import os
 import re
 import subprocess
-import sys
 
 import README
 import helper_tools
@@ -15,22 +14,21 @@ def run_a_file(file_name, temp_out):
 
     if README.code_running_method == 2:
         # popen method - seems to be working the only sad thing is redirecting the error out
-        temp_err_ref = sys.stderr
-        sys.stderr = open(README.temprary_error_out_name, 'r')
+
         file = open(temp_out, 'w')
         file.write(os.popen(rf'python "{os.path.join(os.getcwd(), file_name)}"').read())
         file.close()
-        sys.stderr.close()
-        sys.stderr = temp_err_ref
 
     if README.code_running_method == 3:
         # subprocess method - file gets locked up after infinite loop
         command = rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1'
         subprocess.call(command, shell=True, close_fds=True)
 
-    # Output file isn't found???
+    # Output file isn't getting freed up
     if README.code_running_method == 4:
-        os.popen(rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1')
+        # experimental method
+        p = subprocess.Popen(rf'python "{os.path.join(os.getcwd(), file_name)}"', stdout=open(README.temprary_out_file_name, 'w'), stderr=open(README.temprary_error_out_name, 'w',))
+        p.wait()
 
 
 def get_files(prob, ftype):
