@@ -14,6 +14,8 @@ Limitaions:
   infinite loop, the thread their code is on my stay alive even after the program terminates and ruin everything. The
   only way to stop it is killing the process or restarting the computer etc.
 - The package being used for excel files only supports .xlsx files (not .xls etc.)
+- There are some people putting fancy symbols in their code but the source code and outputs are stored in python strings
+  which use utf-8 encoding so they will give a decode error.
 
 Packages Required:
 - PyQt5
@@ -47,11 +49,11 @@ Code running method:
 code_running_method = 2
 
 """
-Method 1:
+Method 1 (CLEANEST):
   This method will plainly run a python command from your terminal and redirect it to the output file. This method is
   highly preferred except that its process may not die if the code it runs has an inifite loop.
 
-Method 2:
+Method 2 (SAFEST):
   This method is similar to the last except the function returns the output of the student's program to this program
   which then writes it to a file. This method is not affected by infinite loops in students' code, but it does not
   redirect their errors to the output file, they go to the console for this program.
@@ -71,6 +73,7 @@ Name of temporary file student output is written to:
 """
 
 temprary_out_file_name = 'TEMP_OUPUT_JOSH_GRADER.txt'
+temprary_error_out_name = 'TEMP_ERROR_OUTPUT.txt'
 
 """
 Program time allowed:

@@ -72,7 +72,6 @@ if __name__ == '__main__':
             io_data = helper_tools.io_data.IOResults()
             io_data.set_stdout_ref(sys.stdout)
 
-            temp_out = 'TEMP_OUPUT_JOSH_GRADER.txt'
             key_folder = f'HW{hw}Key'
             key_file = f'HW{hw}_Problem{prob}_key.py'
             try:
@@ -83,8 +82,8 @@ if __name__ == '__main__':
             if 'input' in key_source_code:
                 key_output = 'Terminated for using input'
             else:
-                helper_tools.files.run_a_file(os.path.join(key_folder, key_file), temp_out)
-                key_output = open(temp_out, 'r').read()
+                helper_tools.files.run_a_file(os.path.join(key_folder, key_file), README.temprary_out_file_name)
+                key_output = open(README.temprary_out_file_name, 'r').read()
 
             student_python_files = helper_tools.files.get_files(prob, 'py')
             run_files = []
@@ -104,17 +103,24 @@ if __name__ == '__main__':
                 run_counter += 1
 
                 if 'input' in source_file:
-                    open(temp_out, 'w').write('Terminated for using input')
+                    open(README.temprary_out_file_name, 'w').write('Terminated for using input')
                 else:
-                    student_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file, args=(file, temp_out))
+                    student_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file, args=(file, README.temprary_out_file_name))
                     student_run_p.start()
                     student_run_p.join(README.student_program_time_allowed)
                     student_run_p.terminate()
                     student_run_p.join()
 
+                output_to_append = open(README.temprary_out_file_name, 'r').read()
+                if README.code_running_method == 2:
+                    output_to_append += open(README.temprary_error_out_name, 'r').read()
+                if output_to_append == '':
+                    output_to_append = 'NO OUTPUT WAS GENERATED\n' \
+                                       'THIS MAY HAVE BEEN BECAUSE OF AN ERROR OR LOOP'
+
                 run_files.append({'name': student_name,
                                   'source': source_file.replace('\t', ' ' * 4),
-                                  'out': open(temp_out, 'r').read(),
+                                  'out': output_to_append,
                                   'file name': file})
                 # os.remove(temp_out)
             print('Complete')
