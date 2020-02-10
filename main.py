@@ -4,66 +4,10 @@ import sys
 
 import openpyexcel
 
+import README
 import assets.py_file
 import assets.xlsx_file
 import helper_tools
-
-
-# def py_grader(prob, hw):
-#     print(f'Grading py problem {prob}\n')
-#     io_data = helper_tools.io_data.IOResults()
-#     io_data.set_stdout_ref(sys.stdout)
-#
-#     temp_out = 'TEMP_OUPUT_JOSH_GRADER.txt'
-#     key_folder = f'HW{hw}Key'
-#     key_file = f'HW{hw}_Problem{prob}_key.py'
-#     try:
-#         key_source_code = open(os.path.join(key_folder, key_file)).read()
-#     except FileNotFoundError:
-#         helper_tools.input.exit_msg(f'Please put {key_folder}/{key_file} inside {os.getcwd()}')
-#
-#     if 'input' in key_source_code:
-#         key_output = 'Terminated for using input'
-#     else:
-#         key_output = helper_tools.files.run_a_file(os.path.join(key_folder, key_file), temp_out)
-#
-#     student_python_files = helper_tools.files.get_files(prob, 'py')
-#     run_files = []
-#     run_counter = 1
-#     for file in student_python_files:
-#         student_name = f'{file.split("_")[1]} {file.split("_")[0]}'
-#         try:
-#             source_file = open(file, 'r').read()
-#         except UnicodeDecodeError:
-#             run_files.append({'name': student_name,
-#                               'source': '[UNICODE DECODE ERROR]',
-#                               'out': '[UNICODE DECODE ERROR]',
-#                               'file name': file})
-#             continue
-#
-#         print(f'{run_counter}) {file}')
-#         run_counter += 1
-#
-#         if 'input' in source_file:
-#             open(temp_out, 'w').write('Terminated for using input')
-#         else:
-#             student_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file, args=(file, temp_out))
-#             student_run_p.start()
-#             student_run_p.join(helper_tools.input.program_time_allowed)
-#             while student_run_p.is_alive():
-#                 print(f'Terminating {file}')
-#                 student_run_p.terminate()
-#                 student_run_p.join()
-#
-#         run_files.append({'name': student_name,
-#                           'source': source_file,
-#                           'out': open(temp_out, 'r').read(),
-#                           'file name': file})
-#         os.remove(temp_out)
-#     print('Complete')
-#
-#     io_data.populate({'source': key_source_code, 'out': key_output, 'file name': key_file}, run_files)
-#     assets.py_file.py_ui()
 
 
 def xlsx_grader(hw):
@@ -164,7 +108,7 @@ if __name__ == '__main__':
                 else:
                     student_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file, args=(file, temp_out))
                     student_run_p.start()
-                    student_run_p.join(helper_tools.input.program_time_allowed)
+                    student_run_p.join(README.student_program_time_allowed)
                     student_run_p.terminate()
                     student_run_p.join()
 
