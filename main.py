@@ -49,7 +49,7 @@ def py_grader(prob, hw):
             student_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file, args=(file, temp_out))
             student_run_p.start()
             student_run_p.join(helper_tools.input.program_time_allowed)
-            if student_run_p.is_alive():
+            while student_run_p.is_alive():
                 print(f'Terminating {file}')
                 student_run_p.terminate()
                 student_run_p.join()
@@ -58,20 +58,8 @@ def py_grader(prob, hw):
                           'source': source_file,
                           'out': open(temp_out, 'r').read(),
                           'file name': file})
-        # os.remove(temp_out)
-    # sys.stdout = io_data.stdout_ref
+        os.remove(temp_out)
     print('Complete')
-
-    # bad_reads = []
-    # for student in run_files:
-    #     if student['out'] in helper_tools.files.MY_CLASS_ERROR_MESSAGES.values():
-    #         bad_reads.append(student['name'])
-    # if len(bad_reads) == 0:
-    #     print('There were no bad runs')
-    # else:
-    #     print('Could not run:')
-    #     for student in bad_reads:
-    #         print(f'  {student}')
 
     io_data.populate({'source': key_source_code, 'out': key_output, 'file name': key_file}, run_files)
     assets.py_file.py_ui()
@@ -131,7 +119,64 @@ if __name__ == '__main__':
     out_ref = sys.stdout
     if sys.argv[2] == 'py':
         try:
-            py_grader(sys.argv[3], sys.argv[1])
+            # py_grader(sys.argv[3], sys.argv[1])
+
+            prob = sys.argv[3]
+            hw = sys.argv[1]
+            print(f'Grading py problem {prob}\n')
+            io_data = helper_tools.io_data.IOResults()
+            io_data.set_stdout_ref(sys.stdout)
+
+            temp_out = 'TEMP_OUPUT_JOSH_GRADER.txt'
+            key_folder = f'HW{hw}Key'
+            key_file = f'HW{hw}_Problem{prob}_key.py'
+            try:
+                key_source_code = open(os.path.join(key_folder, key_file)).read()
+            except FileNotFoundError:
+                helper_tools.input.exit_msg(f'Please put {key_folder}/{key_file} inside {os.getcwd()}')
+
+            if 'input' in key_source_code:
+                key_output = 'Terminated for using input'
+            else:
+                key_output = helper_tools.files.run_a_file(os.path.join(key_folder, key_file), temp_out)
+
+            student_python_files = helper_tools.files.get_files(prob, 'py')
+            run_files = []
+            run_counter = 1
+            for file in student_python_files:
+                student_name = f'{file.split("_")[1]} {file.split("_")[0]}'
+                try:
+                    source_file = open(file, 'r').read()
+                except UnicodeDecodeError:
+                    run_files.append({'name': student_name,
+                                      'source': '[UNICODE DECODE ERROR]',
+                                      'out': '[UNICODE DECODE ERROR]',
+                                      'file name': file})
+                    continue
+
+                print(f'{run_counter}) {file}')
+                run_counter += 1
+
+                if 'input' in source_file:
+                    open(temp_out, 'w').write('Terminated for using input')
+                else:
+                    student_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file, args=(file, temp_out))
+                    student_run_p.start()
+                    student_run_p.join(helper_tools.input.program_time_allowed)
+                    while student_run_p.is_alive():
+                        print(f'Terminating {file}')
+                        student_run_p.terminate()
+                        student_run_p.join()
+
+                run_files.append({'name': student_name,
+                                  'source': source_file,
+                                  'out': open(temp_out, 'r').read(),
+                                  'file name': file})
+                # os.remove(temp_out)
+            print('Complete')
+
+            io_data.populate({'source': key_source_code, 'out': key_output, 'file name': key_file}, run_files)
+            assets.py_file.py_ui()
         except PermissionError:
             sys.stdout = out_ref
             helper_tools.input.exit_msg('Could not close temp out file - A file is timing out')
