@@ -6,7 +6,7 @@ import helper_tools
 
 
 def run_a_file(file_name, temp_out):
-    method = 3
+    method = 4
 
     if method == 1:
         # Plain os.system method - works except with infinite loops the file can get locked up
@@ -23,12 +23,9 @@ def run_a_file(file_name, temp_out):
         command = rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1'
         subprocess.call(command, shell=True, close_fds=True)
 
-    # This is becoming not different from 2
+    # Output file isn't found???
     if method == 4:
-        file = open(temp_out, 'r')
-        f_out = os.popen(rf'python "{os.path.join(os.getcwd(), file_name)}"')
-        file.write(f_out.read())
-        file.close()
+        os.popen(rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1')
 
 
 def get_files(prob, ftype):
