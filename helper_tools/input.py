@@ -1,9 +1,9 @@
 import os
-import sys
 import re
+import sys
 
 supported_files = ['py', 'xlsx']
-hw_directory = r'C:\Users\josh-laptop\OneDrive\School\CH EN 263 TA'
+hw_directory = r'C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA'
 program_time_allowed = 5
 
 

@@ -1,23 +1,34 @@
 import os
 import re
-import sys
 import subprocess
 
 import helper_tools
 
 
 def run_a_file(file_name, temp_out):
-    # Plain os.system method:
-    # os.system(rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1')
+    method = 3
 
-    # popen method
-    # file = open(temp_out, 'r')
-    # file.write(os.popen(rf'python "{os.path.join(os.getcwd(), file_name)}"').read())
-    # file.close()
+    if method == 1:
+        # Plain os.system method - works except with infinite loops the file can get locked up
+        os.system(rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1')
 
-    # subprocess method
-    subprocess.call([rf'python "{os.path.join(os.getcwd(), file_name)}"',  '>',  rf'{temp_out} 2>&1'])
+    if method == 2:
+        # popen method - seems to be working the only sad thing is redirecting the error out
+        file = open(temp_out, 'w')
+        file.write(os.popen(rf'python "{os.path.join(os.getcwd(), file_name)}"').read())
+        file.close()
 
+    if method == 3:
+        # subprocess method - file gets locked up after infinite loop
+        command = rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1'
+        subprocess.call(command, shell=True, close_fds=True)
+
+    # This is becoming not different from 2
+    if method == 4:
+        file = open(temp_out, 'r')
+        f_out = os.popen(rf'python "{os.path.join(os.getcwd(), file_name)}"')
+        file.write(f_out.read())
+        file.close()
 
 
 def get_files(prob, ftype):

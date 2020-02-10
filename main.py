@@ -1,6 +1,7 @@
+import multiprocessing
 import os
 import sys
-import multiprocessing
+
 import openpyexcel
 
 import assets.py_file
@@ -138,7 +139,8 @@ if __name__ == '__main__':
             if 'input' in key_source_code:
                 key_output = 'Terminated for using input'
             else:
-                key_output = helper_tools.files.run_a_file(os.path.join(key_folder, key_file), temp_out)
+                helper_tools.files.run_a_file(os.path.join(key_folder, key_file), temp_out)
+                key_output = open(temp_out, 'r').read()
 
             student_python_files = helper_tools.files.get_files(prob, 'py')
             run_files = []
@@ -167,7 +169,7 @@ if __name__ == '__main__':
                     student_run_p.join()
 
                 run_files.append({'name': student_name,
-                                  'source': source_file,
+                                  'source': source_file.replace('\t', ' ' * 4),
                                   'out': open(temp_out, 'r').read(),
                                   'file name': file})
                 # os.remove(temp_out)
