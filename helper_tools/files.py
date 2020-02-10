@@ -1,14 +1,23 @@
 import os
 import re
 import sys
+import subprocess
 
 import helper_tools
 
 
 def run_a_file(file_name, temp_out):
-    os.system(rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1')
-    result = open(temp_out, 'r').read()
-    return result
+    # Plain os.system method:
+    # os.system(rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1')
+
+    # popen method
+    # file = open(temp_out, 'r')
+    # file.write(os.popen(rf'python "{os.path.join(os.getcwd(), file_name)}"').read())
+    # file.close()
+
+    # subprocess method
+    subprocess.call([rf'python "{os.path.join(os.getcwd(), file_name)}"',  '>',  rf'{temp_out} 2>&1'])
+
 
 
 def get_files(prob, ftype):
