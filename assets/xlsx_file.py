@@ -107,7 +107,7 @@ class Ui_MainWindow(object):
         elif self.stud_index >= self.excel_data.num_students:
             self.stud_index -= self.excel_data.num_students
 
-        self.student_sheet_turner.setMaximum(len(self.excel_data.students[self.stud_index]['sheets']))
+        self.student_sheet_turner.setMaximum(len(self.excel_data.students[self.stud_index]['sheets'].keys()))
 
         self.current_key_sheet_key = list(self.excel_data.key['sheets'].keys())[self.key_sheet_turner.value() - 1]
         self.current_student_sheet_key = list(self.excel_data.students[self.stud_index]['sheets'].keys())[self.student_sheet_turner.value() - 1]

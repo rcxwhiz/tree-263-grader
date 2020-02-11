@@ -123,6 +123,8 @@ if __name__ == '__main__':
                             student_file['out'] = helper_tools.files.general_error_msg
                     print('finished')
                     num_files_run += 1
+                    if README.pause_between_runs:
+                        input()
 
             print('Complete')
 

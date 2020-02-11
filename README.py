@@ -43,7 +43,8 @@ All of the student and key files will have leading zeros stripped off of them.
 Code running method:
 """
 
-code_running_method = 2
+code_running_method = 1
+pause_between_runs = True
 
 """
 Method 1 (CLEANEST):
