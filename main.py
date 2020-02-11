@@ -17,8 +17,10 @@ def xlsx_grader(hw):
     excel_files = []
     all_files = os.listdir('.')
     for file in all_files:
-        if file.endswith('xlsx'):
+        if file.endswith('.xlsx'):
             excel_files.append(file)
+        elif not file.endswith('.py'):
+            print(f'{file} will not be opened')
 
     key_folder = f'HW{hw}Key'
     key_file = f'HW{hw}_key.xlsx'
@@ -103,10 +105,10 @@ if __name__ == '__main__':
             student_python_file_groups = helper_tools.files.get_py_files()
             for student in student_python_file_groups:
                 for student_file in student_python_file_groups[student]:
-                    print(f'Starting file {num_files_run} ->', end=' ')
+                    print(f'{num_files_run}) {student_file["file name"]} ->', end=' ')
                     if student_file['source code'] == helper_tools.files.unicode_error_msg:
                         student_file['out'] = helper_tools.files.unicode_error_msg
-                    elif student_file['source code'] == helper_tools.files.input_error_msg:
+                    elif re.compile(r'input[ ]*\(').search(student_file['source code']) is not None:
                         student_file['out'] = helper_tools.files.input_error_msg
                     else:
                         student_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file,
