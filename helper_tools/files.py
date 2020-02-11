@@ -1,5 +1,4 @@
 import os
-import re
 import subprocess
 
 import README
@@ -47,11 +46,9 @@ def get_py_files():
         student_name = file_name.split('_')[1] + ' ' + file_name.split('_')[0]
         netid = file_name.split('_')[2]
         try:
-            source_code = open(file_name, 'r').read()
+            source_code = open(file_name, 'r').read().replace('\t', ' ' * 4)
         except UnicodeDecodeError:
             source_code = unicode_error_msg
-        if re.compile(r'input[ ]*\(').search(source_code) is not None:
-            source_code = input_error_msg
         file_dict = {'name': student_name, 'net id': netid, 'source code': source_code, 'file name': file_name}
         if student_name in student_file_groups.keys():
             student_file_groups[student_name].append(file_dict)
