@@ -15,13 +15,13 @@ class IOResultsMeta(type):
 class IOResults(metaclass=IOResultsMeta):
 
     def __init__(self):
-        self.key = None
-        self.students = None
+        self.key_files = None
+        self.student_files = None
         self.num_students = None
 
     def populate(self, key, students):
-        self.key = key
-        self.students = students
+        self.key_files = key
+        self.student_files = students
         self.num_students = len(students)
 
     def set_stdout_ref(self, ref):

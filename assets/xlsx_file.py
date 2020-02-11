@@ -84,6 +84,7 @@ class Ui_MainWindow(object):
         self.key_sheet_turner.setValue(1)
         self.student_sheet_turner.setMinimum(1)
         self.student_sheet_turner.setValue(1)
+
         self.key_sheet_turner.valueChanged.connect(self.update_page)
         self.student_sheet_turner.valueChanged.connect(self.update_page)
 
@@ -105,6 +106,7 @@ class Ui_MainWindow(object):
             self.stud_index += self.excel_data.num_students
         elif self.stud_index >= self.excel_data.num_students:
             self.stud_index -= self.excel_data.num_students
+
         self.student_sheet_turner.setMaximum(len(self.excel_data.students[self.stud_index]['sheets']))
 
         self.current_key_sheet_key = list(self.excel_data.key['sheets'].keys())[self.key_sheet_turner.value() - 1]

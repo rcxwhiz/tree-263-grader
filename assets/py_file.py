@@ -20,11 +20,19 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.key_label = QtWidgets.QLabel(self.centralwidget)
-        self.key_label.setGeometry(QtCore.QRect(10, 40, 691, 16))
+        self.key_label.setGeometry(QtCore.QRect(50, 40, 641, 16))
         self.key_label.setObjectName("key_label")
         self.student_label = QtWidgets.QLabel(self.centralwidget)
-        self.student_label.setGeometry(QtCore.QRect(710, 30, 671, 20))
+        self.student_label.setGeometry(QtCore.QRect(750, 40, 631, 20))
         self.student_label.setObjectName("student_label")
+
+        self.key_sheet_turner = QtWidgets.QSpinBox(self.centralwidget)
+        self.key_sheet_turner.setGeometry(QtCore.QRect(10, 40, 31, 16))
+        self.key_sheet_turner.setObjectName("key_sheet_turner")
+        self.student_sheet_turner = QtWidgets.QSpinBox(self.centralwidget)
+        self.student_sheet_turner.setGeometry(QtCore.QRect(710, 40, 31, 16))
+        self.student_sheet_turner.setObjectName("student_sheet_turner")
+
         self.widget = QtWidgets.QWidget(self.centralwidget)
         self.widget.setGeometry(QtCore.QRect(20, 10, 521, 25))
         self.widget.setObjectName("widget")
@@ -72,14 +80,26 @@ class Ui_MainWindow(object):
     def josh_hooks(self, MainWindow):
         self.previous_file_button.clicked.connect(self.move_page_back)
         self.next_file_botton.clicked.connect(self.move_page_forward)
+
+        self.key_sheet_turner.setMinimum(1)
+        self.key_sheet_turner.setRange(1, len(self.io_data.key_files))
+        self.key_sheet_turner.setValue(1)
+        self.student_sheet_turner.setMinimum(1)
+        self.student_sheet_turner.setValue(1)
+
+        self.key_sheet_turner.valueChanged.connect(self.update_page)
+        self.student_sheet_turner.valueChanged.connect(self.update_page)
+
         self.update_page()
 
     def move_page_back(self):
         self.code_index -= 1
+        self.student_sheet_turner.setValue(1)
         self.update_page()
 
     def move_page_forward(self):
         self.code_index += 1
+        self.student_sheet_turner.setValue(1)
         self.update_page()
 
     def update_page(self):
@@ -88,19 +108,20 @@ class Ui_MainWindow(object):
         elif self.code_index >= self.io_data.num_students:
             self.code_index -= self.io_data.num_students
 
-        self.key_label.setText(f'Key - {self.io_data.key["file name"]}')
-        self.student_label.setText(f'{self.io_data.students[self.code_index]["name"]} - '
+        self.student_sheet_turner.setMaximum(len(self.io_data.student_files[list(self.io_data.student_files.keys())[self.code_index]]))
+
+        self.key_label.setText(f'Key - {self.io_data.key_files[self.key_sheet_turner.value() - 1]["file name"]}')
+        self.student_label.setText(f'{list(self.io_data.student_files.keys())[self.code_index]} - '
                                    f'{self.code_index + 1}/{self.io_data.num_students} - '
-                                   f'{self.io_data.students[self.code_index]["file name"]}')
+                                   f'{self.io_data.student_files[list(self.io_data.student_files.keys())[self.code_index]][self.student_sheet_turner.value() - 1]["file name"]}')
 
-        self.next_file_botton.setText(self.io_data.students[(self.code_index + 1) % self.io_data.num_students]['name'])
-        self.previous_file_button.setText(self.io_data.students[self.code_index - 1]['name'])
+        self.next_file_botton.setText(list(self.io_data.student_files.keys())[(self.code_index + 1) % self.io_data.num_students])
+        self.previous_file_button.setText(list(self.io_data.student_files.keys())[self.code_index - 1])
 
-        self.key_source_display.setText(self.io_data.key['source'])
-        self.key_out_display.setText(self.io_data.key['out'])
-        self.student_source_display.setText(self.io_data.students[self.code_index]['source'])
-        self.student_out_display.setText(self.io_data.students[self.code_index]['out'])
-
+        self.key_source_display.setText(self.io_data.key_files[self.key_sheet_turner.value() - 1]['source code'])
+        self.key_out_display.setText(self.io_data.key_files[self.key_sheet_turner.value() - 1]['out'])
+        self.student_source_display.setText(self.io_data.student_files[list(self.io_data.student_files.keys())[self.code_index]][self.student_sheet_turner.value() - 1]['source code'])
+        self.student_out_display.setText(self.io_data.student_files[list(self.io_data.student_files.keys())[self.code_index]][self.student_sheet_turner.value() - 1]['out'])
 
 
 def py_ui():
@@ -111,6 +132,7 @@ def py_ui():
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
     import sys

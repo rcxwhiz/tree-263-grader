@@ -3,13 +3,10 @@ Josh Bedwell's CH EN 263 Grader
 
 This program runs and displays python or excel files in the when they are in the format that students submit
 This program will take arguments in the following forms:
-  {hw num} py {prob num}
-  {hw num} xlsx
+  {hw num} {py/xlsx}
 If no arguments are given it will ask for parameters when the program starts.
 
 Limitaions:
-- When grading python files the program looks for "{"part"/"problem"}{any chars}{problem number}"
-  If a student names their file a different way it won't be found
 - There are diffrent methods for running the files. The biggest limitation is that if a student submits code with an
   infinite loop, the thread their code is on my stay alive even after the program terminates and ruin everything. The
   only way to stop it is killing the process or restarting the computer etc.

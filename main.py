@@ -12,7 +12,7 @@ import helper_tools
 
 
 def xlsx_grader(hw):
-    print('Grading xlsx')
+    print('Grading xlsx problems\n')
 
     excel_files = []
     all_files = os.listdir('.')
@@ -65,66 +65,66 @@ if __name__ == '__main__':
     out_ref = sys.stdout
     if sys.argv[2] == 'py':
         try:
-            prob = sys.argv[3]
             hw = sys.argv[1]
-            print(f'Grading py problem {prob}\n')
+            print(f'Grading py problems\n')
             io_data = helper_tools.io_data.IOResults()
             io_data.set_stdout_ref(sys.stdout)
 
             key_folder = f'HW{hw}Key'
-            key_file = f'HW{hw}_Problem{prob}_key.py'
-            try:
-                key_source_code = open(os.path.join(key_folder, key_file)).read()
-            except FileNotFoundError:
-                helper_tools.input.exit_msg(f'Please put {key_folder}/{key_file} inside {os.getcwd()}')
+            key_files = []
+            for key in os.listdir(key_folder):
+                if key.endswith('.py'):
+                    key_files.append({'file name': key})
 
             input_re = re.compile(r'input[ ]*\(')
-            if input_re.search(key_source_code) is not None:
-                key_output = 'Terminated for using input'
-            else:
-                helper_tools.files.run_a_file(os.path.join(key_folder, key_file), README.temprary_out_file_name)
-                key_output = open(README.temprary_out_file_name, 'r').read()
 
-            student_python_files = helper_tools.files.get_files(prob, 'py')
-            run_files = []
-            run_counter = 1
-            for file in student_python_files:
-                student_name = f'{file.split("_")[1]} {file.split("_")[0]}'
+            for key_file in key_files:
                 try:
-                    source_file = open(file, 'r').read()
+                    key_file['source code'] = open(os.path.join(key_folder, key_file['file name'])).read()
                 except UnicodeDecodeError:
-                    run_files.append({'name': student_name,
-                                      'source': '[UNICODE DECODE ERROR]',
-                                      'out': '[UNICODE DECODE ERROR]',
-                                      'file name': file})
+                    key_file['source code'] = helper_tools.files.unicode_error_msg
+                    key_file['out'] = helper_tools.files.unicode_error_msg
                     continue
+                if input_re.search(key_file['source code']) is not None:
+                    key_file['source code'] = helper_tools.files.input_error_msg
+                    key_file['out'] = helper_tools.files.input_error_msg
+                    continue
+                key_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file,
+                                                    args=(os.path.join(key_folder, key_file['file name']),
+                                                          README.temprary_out_file_name))
+                key_run_p.start()
+                key_run_p.join(README.student_program_time_allowed)
+                key_run_p.terminate()
+                key_run_p.join()
 
-                print(f'{run_counter}) {file}')
-                run_counter += 1
+                key_file['out'] = open(README.temprary_out_file_name).read()
 
-                if input_re.search(source_file) is not None:
-                    open(README.temprary_out_file_name, 'w').write('Terminated for using input')
-                else:
-                    student_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file, args=(file, README.temprary_out_file_name))
-                    student_run_p.start()
-                    student_run_p.join(README.student_program_time_allowed)
-                    student_run_p.terminate()
-                    student_run_p.join()
+            num_files_run = 1
+            student_python_file_groups = helper_tools.files.get_py_files()
+            for student in student_python_file_groups:
+                for student_file in student_python_file_groups[student]:
+                    print(f'Starting file {num_files_run} ->', end=' ')
+                    if student_file['source code'] == helper_tools.files.unicode_error_msg:
+                        student_file['out'] = helper_tools.files.unicode_error_msg
+                    elif student_file['source code'] == helper_tools.files.input_error_msg:
+                        student_file['out'] = helper_tools.files.input_error_msg
+                    else:
+                        student_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file,
+                                                                args=(student_file['file name'],
+                                                                      README.temprary_out_file_name))
+                        student_run_p.start()
+                        student_run_p.join(README.student_program_time_allowed)
+                        student_run_p.terminate()
+                        student_run_p.join()
+                        student_file['out'] = open(README.temprary_out_file_name, 'r').read()
+                        if student_file['out'] == '':
+                            student_file['out'] = helper_tools.files.general_error_msg
+                    print('finished')
+                    num_files_run += 1
 
-                output_to_append = open(README.temprary_out_file_name, 'r').read()
-
-                if output_to_append == '':
-                    output_to_append = 'NO OUTPUT WAS GENERATED\n' \
-                                       'THIS MAY HAVE BEEN BECAUSE OF AN ERROR OR LOOP' \
-                                       'Check the console for error?'
-
-                run_files.append({'name': student_name,
-                                  'source': source_file.replace('\t', ' ' * 4),
-                                  'out': output_to_append,
-                                  'file name': file})
             print('Complete')
 
-            io_data.populate({'source': key_source_code, 'out': key_output, 'file name': key_file}, run_files)
+            io_data.populate(key_files, student_python_file_groups)
             assets.py_file.py_ui()
             os.remove(README.temprary_out_file_name)
         except PermissionError:
