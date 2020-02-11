@@ -65,8 +65,6 @@ if __name__ == '__main__':
     out_ref = sys.stdout
     if sys.argv[2] == 'py':
         try:
-            # py_grader(sys.argv[3], sys.argv[1])
-
             prob = sys.argv[3]
             hw = sys.argv[1]
             print(f'Grading py problem {prob}\n')
@@ -123,11 +121,11 @@ if __name__ == '__main__':
                                   'source': source_file.replace('\t', ' ' * 4),
                                   'out': output_to_append,
                                   'file name': file})
-                # os.remove(temp_out)
             print('Complete')
 
             io_data.populate({'source': key_source_code, 'out': key_output, 'file name': key_file}, run_files)
             assets.py_file.py_ui()
+            os.remove(README.temprary_out_file_name)
         except PermissionError:
             sys.stdout = out_ref
             helper_tools.input.exit_msg('Could not close temp out file - A file is timing out')

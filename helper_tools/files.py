@@ -14,7 +14,6 @@ def run_a_file(file_name, temp_out):
 
     if README.code_running_method == 2:
         # popen method - seems to be working the only sad thing is redirecting the error out
-
         file = open(temp_out, 'w')
         file.write(os.popen(rf'python "{os.path.join(os.getcwd(), file_name)}"').read())
         file.close()
@@ -27,8 +26,7 @@ def run_a_file(file_name, temp_out):
     # Output file isn't getting freed up
     if README.code_running_method == 4:
         # experimental method
-        p = subprocess.Popen(rf'python "{os.path.join(os.getcwd(), file_name)}"', stdout=open(README.temprary_out_file_name, 'w'), stderr=open(README.temprary_error_out_name, 'w',))
-        p.wait()
+        os.popen(rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1')
 
 
 def get_files(prob, ftype):
