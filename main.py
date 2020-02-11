@@ -68,6 +68,9 @@ if __name__ == '__main__':
     if sys.argv[2] == 'py':
         try:
             hw = sys.argv[1]
+            print('Creating HW directories...')
+
+
             print(f'Grading py problems\n')
             io_data = helper_tools.io_data.IOResults()
             io_data.set_stdout_ref(sys.stdout)
