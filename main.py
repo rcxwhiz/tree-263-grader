@@ -115,7 +115,8 @@ if __name__ == '__main__':
 
                 if output_to_append == '':
                     output_to_append = 'NO OUTPUT WAS GENERATED\n' \
-                                       'THIS MAY HAVE BEEN BECAUSE OF AN ERROR OR LOOP'
+                                       'THIS MAY HAVE BEEN BECAUSE OF AN ERROR OR LOOP' \
+                                       'Check the console for error?'
 
                 run_files.append({'name': student_name,
                                   'source': source_file.replace('\t', ' ' * 4),

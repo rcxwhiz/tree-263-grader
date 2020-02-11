@@ -100,17 +100,20 @@ class Ui_MainWindow(object):
         self.update_page()
 
     def update_page(self):
-        self.student_sheet_turner.setMaximum(len(self.excel_data.students[self.stud_index]['sheets']))
 
         if self.stud_index < 0:
             self.stud_index += self.excel_data.num_students
         elif self.stud_index >= self.excel_data.num_students:
             self.stud_index -= self.excel_data.num_students
+        self.student_sheet_turner.setMaximum(len(self.excel_data.students[self.stud_index]['sheets']))
 
         self.current_key_sheet_key = list(self.excel_data.key['sheets'].keys())[self.key_sheet_turner.value() - 1]
         self.current_student_sheet_key = list(self.excel_data.students[self.stud_index]['sheets'].keys())[self.student_sheet_turner.value() - 1]
         self.key_label.setText(f'{self.excel_data.key["file name"]} - {self.current_key_sheet_key}')
-        self.student_label.setText(f'{self.excel_data.students[self.stud_index]["name"]} - {self.excel_data.students[self.stud_index]["file name"]} - {self.current_student_sheet_key}')
+        self.student_label.setText(f'{self.excel_data.students[self.stud_index]["name"]} - '
+                                   f'{self.stud_index + 1}/{len(self.excel_data.students)} - '
+                                   f'{self.excel_data.students[self.stud_index]["file name"]} - '
+                                   f'{self.current_student_sheet_key}')
 
         self.next_file_botton.setText(self.excel_data.students[(self.stud_index + 1) % self.excel_data.num_students]['name'])
         self.previous_file_button.setText(self.excel_data.students[self.stud_index - 1]['name'])
