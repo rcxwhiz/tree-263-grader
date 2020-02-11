@@ -1,5 +1,6 @@
 import multiprocessing
 import os
+import re
 import sys
 
 import openpyexcel
@@ -79,7 +80,8 @@ if __name__ == '__main__':
             except FileNotFoundError:
                 helper_tools.input.exit_msg(f'Please put {key_folder}/{key_file} inside {os.getcwd()}')
 
-            if 'input' in key_source_code:
+            input_re = re.compile(r'input[ ]*\(')
+            if input_re.search(key_source_code) is not None:
                 key_output = 'Terminated for using input'
             else:
                 helper_tools.files.run_a_file(os.path.join(key_folder, key_file), README.temprary_out_file_name)
@@ -102,7 +104,7 @@ if __name__ == '__main__':
                 print(f'{run_counter}) {file}')
                 run_counter += 1
 
-                if 'input' in source_file:
+                if input_re.search(source_file) is not None:
                     open(README.temprary_out_file_name, 'w').write('Terminated for using input')
                 else:
                     student_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file, args=(file, README.temprary_out_file_name))
@@ -112,8 +114,7 @@ if __name__ == '__main__':
                     student_run_p.join()
 
                 output_to_append = open(README.temprary_out_file_name, 'r').read()
-                # if README.code_running_method == 2:
-                #     output_to_append += open(README.temprary_error_out_name, 'r').read()
+
                 if output_to_append == '':
                     output_to_append = 'NO OUTPUT WAS GENERATED\n' \
                                        'THIS MAY HAVE BEEN BECAUSE OF AN ERROR OR LOOP'
