@@ -23,7 +23,7 @@ Packages Required:
 Homeork location:
 """
 
-hw_directory = r'C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA'
+hw_directory = r'C:\Users\josh-laptop\OneDrive\School\CH EN 263 TA'
 
 r"""
 Example file path this code is looking for:
@@ -43,10 +43,13 @@ All of the student and key files will have leading zeros stripped off of them.
 Code running method:
 """
 
-code_running_method = 1
-pause_between_runs = True
+code_running_method = 0
+pause_between_runs = False
 
 """
+Method 0:
+  Don't run code, just display source and no output. (Key code will always be run.)
+
 Method 1 (CLEANEST):
   This method will plainly run a python command from your terminal and redirect it to the output file. This method is
   highly preferred except that its process may not die if the code it runs has an inifite loop.

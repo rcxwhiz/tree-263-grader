@@ -8,6 +8,7 @@ input_error_msg = 'FILE TERMINATED FOR USING INPUT'
 general_error_msg = 'NO OUTPUT WAS GENERATED\n' \
                     'THIS MAY HAVE BEEN BECAUSE OF AN ERROR OR LOOP\n' \
                     'Check the console for error?'
+no_code_run_msg = 'CODE RUNNING OFF'
 
 
 def run_a_file(file_name, temp_out):

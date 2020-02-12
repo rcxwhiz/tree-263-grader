@@ -110,6 +110,8 @@ if __name__ == '__main__':
                         student_file['out'] = helper_tools.files.unicode_error_msg
                     elif re.compile(r'input[ ]*\(').search(student_file['source code']) is not None:
                         student_file['out'] = helper_tools.files.input_error_msg
+                    elif README.code_running_method == 0:
+                        student_file['out'] = helper_tools.files.no_code_run_msg
                     else:
                         student_run_p = multiprocessing.Process(target=helper_tools.files.run_a_file,
                                                                 args=(student_file['file name'],
