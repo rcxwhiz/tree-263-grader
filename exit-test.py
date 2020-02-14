@@ -11,8 +11,8 @@ kill_thread.start()
 # ###############################################
 
 print('test')
-while True:
-    i = 0
+# while True:
+#     i = 0
 
 # MY CODE PART 2 ################################
 os._exit(1)

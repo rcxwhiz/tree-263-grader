@@ -1,0 +1,12 @@
+TODO a way to choose the timeout time from config
+# EXIT SCRIPT ###################################
+import os
+import time
+import threading
+def kill_prog():
+    time.sleep(1)
+    print('Killed')
+    os._exit(THREADING_TIMER)
+kill_thread = threading.Thread(target=kill_prog)
+kill_thread.start()
+# ###############################################
