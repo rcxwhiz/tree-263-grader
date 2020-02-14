@@ -9,7 +9,7 @@ Limitaions:
 - The package being used for excel files only supports .xlsx files (not .xls etc.)
 - There are some people putting fancy symbols in their code but the source code and outputs are stored in python strings
   which use utf-8 encoding so they will give a decode error.
-- You cannot see graphs made in excel and you cannot see graphs generated on the fly in python
+- You cannot see graphs made in excel and you cannot see unsaved graphs from python
 
 Packages Required:
 - PyQt5

@@ -1,4 +1,3 @@
-TODO a way to choose the timeout time from config
 # EXIT SCRIPT ###################################
 import os
 import time

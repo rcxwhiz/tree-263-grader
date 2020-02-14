@@ -10,7 +10,8 @@ kill_thread = threading.Thread(target=kill_prog)
 kill_thread.start()
 # ###############################################
 
-print('test')
+import sys
+print(sys.argv)
 # while True:
 #     i = 0
 
