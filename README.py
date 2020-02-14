@@ -1,7 +1,9 @@
 # TODO make it so that a directory is created for each student
 # TODO each student's directory only gets filled with .py files unless others are specified (ex. xlsx, xls...)
 # TODO the reason for this would be so that each student's code can be run from fresh
-# TODO try to impliment different code execution from reddit
+# TODO change code to use (configurable number of) regular threads
+# TODO create a temp file to execute by adding my safety stuff to the beginning and end of the file
+# TODO make it so that output is always redirected properly
 # TODO think about a solution to files that generate and show plots
 # TODO make a real config file, change readme to only be documentation
 # TODO HW direc -> bundledown, key, data, grades output [time] -> key result, stud1 result, stud2 result
@@ -10,6 +12,7 @@
 # TODO Improve message for unopened excel files
 # TODO after copying the data into each directory it could then be deleted?
 # TODO Refactor package structure to make sense
+# TODO find a way to save or display plots that are made on the fly, maybe a saveall plt command?
 
 """
 Josh Bedwell's CH EN 263 Grader
