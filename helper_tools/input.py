@@ -17,18 +17,15 @@ def remove_zeros(name):
 
 
 def validate_args(args):
-    if len(args) > 3 or len(args) == 2:
+
+    if len(args) == 1:
+        args.append(input('Enter the HW number: '))
+        args.append(input('Enter the HW type (py/xlsx): '))
+    elif len(args) == 2 or len(args) > 3:
         exit_msg(f'Valid arguments:\n'
                  f'[hw num] py [prob num]\n'
                  f'[hw num] xlsx')
-    elif len(args) == 3:
-        if args[2] != 'xlsx' and args[2] != 'py':
-            exit_msg(f'Valid arguments:\n'
-                     f'[hw num] py [prob num]\n'
-                     f'[hw num] xlsx')
-    elif len(args) == 1:
-        args.append(input('Enter the HW number: '))
-        args.append(input('Enter the HW type (py/xlsx): '))
+
     try:
         os.chdir(os.path.join(README.hw_directory, 'HW ' + args[1]))
     except FileNotFoundError:

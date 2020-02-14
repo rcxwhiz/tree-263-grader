@@ -14,3 +14,4 @@ Limitaions:
 Packages Required:
 - PyQt5
 - openpyexcel
+- configparser
