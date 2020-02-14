@@ -1,13 +1,24 @@
+import datetime
 import os
 import subprocess
 
-import README
+import helper_tools.config_reader as config
 
 unicode_error_msg = 'UNICODE DECODE ERROR'
 input_error_msg = 'FILE TERMINATED FOR USING INPUT'
 general_error_msg = 'NO OUTPUT WAS GENERATED\n' \
                     'THIS MAY HAVE BEEN BECAUSE OF AN ERROR OR LOOP\n' \
                     'Check the console for error?'
+
+
+def make_dirs():
+    students = []
+    for file in os.listdir('.'):
+        if file.count('_') > 2:
+            students.append(file.split('_')[0:3])
+
+    os.mkdir(config.report_folder_name + ' ' + str(datetime.datetime.now()))
+    # TODO make all the other student directories from here
 
 
 def run_a_file(file_name, temp_out):
@@ -56,13 +67,3 @@ def get_py_files():
             student_file_groups[student_name] = [file_dict]
 
     return student_file_groups
-
-    # prob_re = re.compile(rf'problem.*{prob}')
-    # part_re = re.compile(rf'part.*{prob}')
-    # for file in all_files:
-    #     if file.endswith(ftype) and (
-    #             (prob_re.search(file.lower()) is not None) or (part_re.search(file.lower()) is not None)):
-    #         good_files.append(file)
-    # if len(good_files) == 0:
-    #     helper_tools.input.exit_msg(f'No files for problem {prob} found')
-    # return good_files

@@ -2,7 +2,7 @@ import os
 import re
 import sys
 
-import README
+import helper_tools.config_reader as config
 
 
 def exit_msg(msg):
@@ -27,11 +27,12 @@ def validate_args(args):
                  f'[hw num] xlsx')
 
     try:
-        os.chdir(os.path.join(README.hw_directory, 'HW ' + args[1]))
+        os.chdir(os.path.join(config.hw_directory, 'HW ' + args[1]))
     except FileNotFoundError:
         exit_msg(f'Could not find the HW folder:\n'
-                 f'{os.path.join(README.hw_directory, "HW " + args[1])}')
+                 f'{os.path.join(config.hw_directory, "HW " + args[1])}')
     hw_dirs = os.listdir('.')
+
     for cdir in hw_dirs:
         if 'Gradebook Bundled Download' in cdir:
             os.chdir(cdir)

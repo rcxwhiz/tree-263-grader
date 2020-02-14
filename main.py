@@ -5,10 +5,10 @@ import sys
 
 import openpyexcel
 
-import README
 import assets.py_ui
 import assets.xlsx_ui
 import helper_tools
+import helper_tools.config_reader as config
 
 
 def xlsx_grader(hw):
@@ -64,6 +64,7 @@ def xlsx_grader(hw):
 
 if __name__ == '__main__':
     helper_tools.input.validate_args(sys.argv)
+    helper_tools.files.make_dirs()
     if sys.argv[2] == 'py':
         print('help')
         # try:
