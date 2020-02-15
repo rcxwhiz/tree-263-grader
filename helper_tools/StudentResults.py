@@ -3,29 +3,26 @@ from __future__ import annotations
 from typing import Optional
 
 
-class IOResultsMeta(type):
-    _instance: Optional[IOResults] = None
+class PythonResultsMeta(type):
+    _instance: Optional[PythonResults] = None
 
-    def __call__(self) -> IOResults:
+    def __call__(self) -> PythonResults:
         if self._instance is None:
             self._instance = super().__call__()
         return self._instance
 
 
-class IOResults(metaclass=IOResultsMeta):
+class PythonResults(metaclass=PythonResultsMeta):
 
     def __init__(self):
-        self.key_files = None
-        self.student_files = None
-        self.num_students = None
+        self.key_files = []
+        self.student_files = {}
+        self.num_students = 0
 
     def populate(self, key, students):
         self.key_files = key
         self.student_files = students
         self.num_students = len(students)
-
-    def set_stdout_ref(self, ref):
-        self.stdout_ref = ref
 
 
 class ExcelResultsMeta(type):

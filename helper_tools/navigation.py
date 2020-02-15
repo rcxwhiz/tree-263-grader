@@ -21,6 +21,7 @@ class DirsMeta(type):
 
 class Dirs(metaclass=DirsMeta):
     def __init__(self, hw_num):
+        print('Creating directories...')
         try:
             self.class_dir = config.hw_directory
 
@@ -49,6 +50,7 @@ class Dirs(metaclass=DirsMeta):
         for student in self.students:
             os.mkdir(join(self.result_dir, student))
 
+        print('Moving student files...')
         self._populate_student_dirs()
 
     def _populate_student_dirs(self):

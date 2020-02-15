@@ -1,8 +1,11 @@
 import datetime
 import os
+import threading
 import subprocess
 
+from os.path import join
 import helper_tools.config_reader as config
+import helper_tools.navigation
 
 unicode_error_msg = 'UNICODE DECODE ERROR'
 input_error_msg = 'FILE TERMINATED FOR USING INPUT'
@@ -10,28 +13,40 @@ general_error_msg = 'NO OUTPUT WAS GENERATED\n' \
                     'THIS MAY HAVE BEEN BECAUSE OF AN ERROR OR LOOP\n' \
                     'Check the console for error?'
 
+navi = helper_tools.navigation.Dirs('')
 
-def run_a_file(file_name, temp_out):
 
-    if README.code_running_method == 1:
-        # Plain os.system method - works except with infinite loops the file can get locked up
-        os.system(rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1')
+def read_file(file):
+    try:
+        return open(file).read()
+    except UnicodeDecodeError:
+        return unicode_error_msg
 
-    if README.code_running_method == 2:
-        # popen method - seems to be working the only sad thing is redirecting the error out
-        file = open(temp_out, 'w')
-        file.write(os.popen(rf'python "{os.path.join(os.getcwd(), file_name)}"').read())
-        file.close()
 
-    if README.code_running_method == 3:
-        # subprocess method - file gets locked up after infinite loop
-        command = rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1'
-        subprocess.call(command, shell=True, close_fds=True)
+def run_files(dicts):
+    base_threads = threading.active_count()
+    if config.max_concurrent_programs == 0:
+        for dict in dicts:
+            run_a_file(dict['source code'])
+    else:
+        # TODO finish this part where it spawns the right number of threads
+        while threading.active_count() < base_threads + config.max_concurrent_programs:
 
-    # Output file isn't getting freed up
-    if README.code_running_method == 4:
-        # experimental method
-        os.popen(rf'python "{os.path.join(os.getcwd(), file_name)}" > {temp_out} 2>&1')
+
+def run_key():
+    base_threads = threading.active_count()
+    for file in os.listdir(navi.key_dir):
+        if file.endswith('.py'):
+            file_name = file
+            source_code = read_file(join(navi.key_dir, file))
+            # TODO this part is just going to make a list of dicts, give that to run_files, and run_files will take care of assembling dict stuff
+            out = run_a_file(file, config.file_out_name)
+            out = read_file(config.file_out_name)
+
+
+def run_a_file(py_file, out_file):
+    # TODO append the kill sript at the top of the file
+    os.system(rf'python "{py_file}" > {out_file} 2>&1')
 
 
 def get_py_files():

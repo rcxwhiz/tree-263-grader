@@ -55,7 +55,7 @@ def xlsx_grader(hw):
         student_name = f'{student_file.split("_")[1]} {student_file.split("_")[0]}'
         student_sheets.append({'name': student_name, 'file name': student_file, 'sheets': student_sheet_builder})
 
-    excel_data = helper_tools.io_data.ExcelResults()
+    excel_data = helper_tools.StudentResults.ExcelResults()
     excel_data.populate(key_sheets, student_sheets)
     assets.xlsx_ui.xlsx_ui()
 
@@ -64,6 +64,7 @@ if __name__ == '__main__':
     helper_tools.input.validate_args(sys.argv)
     if sys.argv[2] == 'py':
         navi = helper_tools.navigation.Dirs(sys.argv[1])
+        helper_tools.files.run_key()
         # try:
         #     hw = sys.argv[1]
         #     print('Creating HW directories...')
