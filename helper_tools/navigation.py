@@ -20,7 +20,15 @@ class DirsMeta(type):
 
 
 class Dirs(metaclass=DirsMeta):
-    def __init__(self, hw_num):
+    def __init__(self):
+        self.class_dir = None
+        self.hw_dir = None
+        self.download_dir = None
+        self.result_dir = None
+        self.key_dir = None
+        self.students = None
+
+    def create_members(self, hw_num):
         print('Creating directories...')
         try:
             self.class_dir = config.hw_directory
@@ -29,7 +37,7 @@ class Dirs(metaclass=DirsMeta):
 
             self.download_dir = ''
             for file in os.listdir(self.hw_dir):
-                if 'Gradebook Bundled Download' in file and os.path.isdir(file):
+                if os.path.isdir(file) and 'Gradebook Bundled Download' in file:
                     self.download_dir = join(self.hw_dir, file)
                     break
 

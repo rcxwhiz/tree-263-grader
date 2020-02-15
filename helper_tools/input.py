@@ -26,7 +26,8 @@ def validate_args(args):
                  f'[hw num] py [prob num]\n'
                  f'[hw num] xlsx')
 
-    dirs = helper_tools.navigation.Dirs(args[1])
+    dirs = helper_tools.navigation.Dirs()
+    dirs.create_members(args[1])
 
     # TODO this should probably happen in the Dirs class and not here
     for file in os.listdir(dirs.download_dir):

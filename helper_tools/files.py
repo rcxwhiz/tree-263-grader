@@ -1,11 +1,12 @@
 import datetime
 import os
 import threading
-import subprocess
+import sys
 
 from os.path import join
 import helper_tools.config_reader as config
 import helper_tools.navigation
+import helper_tools.StudentResults
 
 unicode_error_msg = 'UNICODE DECODE ERROR'
 input_error_msg = 'FILE TERMINATED FOR USING INPUT'
@@ -13,12 +14,12 @@ general_error_msg = 'NO OUTPUT WAS GENERATED\n' \
                     'THIS MAY HAVE BEEN BECAUSE OF AN ERROR OR LOOP\n' \
                     'Check the console for error?'
 
-navi = helper_tools.navigation.Dirs('')
+results = helper_tools.StudentResults.PythonResults()
 
 
 def read_file(file):
     try:
-        return open(file).read()
+        return open(file, 'r').read()
     except UnicodeDecodeError:
         return unicode_error_msg
 
@@ -26,27 +27,39 @@ def read_file(file):
 def run_files(dicts):
     base_threads = threading.active_count()
     if config.max_concurrent_programs == 0:
-        for dict in dicts:
-            run_a_file(dict['source code'])
+        max_threads = 10000
     else:
-        # TODO finish this part where it spawns the right number of threads
-        while threading.active_count() < base_threads + config.max_concurrent_programs:
+        max_threads = base_threads + config.max_concurrent_programs
+    num_run = 0
+    threads = []
+    while num_run < len(dicts):
+        if threading.active_count() < max_threads:
+            dict_obj = dicts[num_run]
+            threads.append(threading.Thread(target=run_a_file,
+                                            args=(join(dict_obj['file path'], dict_obj['file name']),
+                                                  config.file_out_name)))
+            threads[-1].start()
+
+    for thread in threads:
+        thread.join()
+
+    for dict_obj in dicts:
+        dict_obj['out'] = read_file(join(dict_obj['file path'], config.file_out_name))
+        os.remove(join(dict_obj['file path'], config.file_out_name))
 
 
 def run_key():
-    base_threads = threading.active_count()
-    for file in os.listdir(navi.key_dir):
-        if file.endswith('.py'):
-            file_name = file
-            source_code = read_file(join(navi.key_dir, file))
-            # TODO this part is just going to make a list of dicts, give that to run_files, and run_files will take care of assembling dict stuff
-            out = run_a_file(file, config.file_out_name)
-            out = read_file(config.file_out_name)
+    run_files(results.key_files)
 
 
 def run_a_file(py_file, out_file):
-    # TODO append the kill sript at the top of the file
-    os.system(rf'python "{py_file}" > {out_file} 2>&1')
+    script_prefix = open(join(sys.argv[0], 'scripts', 'exit-script-beginning.txt'), 'r').read()
+    student_script = open(py_file, 'r').read()
+    script_postfix = open(join(sys.argv[0], 'scripts', 'exit-script-end.txt'), 'r').read()
+    temp_script_name = py_file[:-3] + '-MODIFIED.py'
+    open(temp_script_name, 'w').write(script_prefix + student_script + script_postfix)
+    os.system(rf'python "{temp_script_name}" > {out_file} 2>&1')
+    os.remove(temp_script_name)
 
 
 def get_py_files():
