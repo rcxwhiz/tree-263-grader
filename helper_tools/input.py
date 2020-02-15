@@ -8,12 +8,14 @@ import helper_tools.navigation
 def exit_msg(msg):
     print('\n[ERROR]')
     print(msg)
-    input('Press any key to exit...')
+    input('Press return to exit...')
     sys.exit()
 
 
 def remove_zeros(name):
-    return re.sub(r'0+(\d)', r'\1', name)
+    name = re.sub(r'0+(\d)', r'\1', name)
+    # name.replace('_', '')
+    return name.lower()
 
 
 def validate_args(args):
@@ -26,11 +28,7 @@ def validate_args(args):
                  f'[hw num] py [prob num]\n'
                  f'[hw num] xlsx')
 
-    dirs = helper_tools.navigation.Dirs()
-    dirs.create_members(args[1])
 
-    # TODO this should probably happen in the Dirs class and not here
-    for file in os.listdir(dirs.download_dir):
-        os.rename(os.path.join(dirs.download_dir, file), os.path.join(dirs.download_dir, remove_zeros(file)))
-    for file in os.listdir(dirs.key_dir):
-        os.rename(os.path.join(dirs.key_dir, file), os.path.join(dirs.key_dir, remove_zeros(file)))
+def initialize_files(hw_num):
+    dirs = helper_tools.navigation.Dirs()
+    dirs.create_members(hw_num)

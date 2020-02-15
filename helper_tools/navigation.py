@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+from datetime import datetime
 import os
 import shutil
 from os.path import join
@@ -37,23 +37,32 @@ class Dirs(metaclass=DirsMeta):
 
             self.download_dir = ''
             for file in os.listdir(self.hw_dir):
-                if os.path.isdir(file) and 'Gradebook Bundled Download' in file:
+                if 'Gradebook Bundled Download' in file:
                     self.download_dir = join(self.hw_dir, file)
                     break
 
-            self.result_dir = join(self.hw_dir, config.report_folder_name + ' ' + str(datetime.datetime.now()))
+            self.key_dir = join(self.hw_dir, f'hw{hw_num}key')
+
+            for file in os.listdir(self.download_dir):
+                os.rename(join(self.download_dir, file), join(self.download_dir, helper_tools.input.remove_zeros(file)))
+            for file in os.listdir(self.key_dir):
+                os.rename(join(self.key_dir, file), join(self.key_dir, helper_tools.input.remove_zeros(file)))
+
+            dt = datetime.now()
+            timestamp = f'[{dt.month}-{dt.day}-{str(dt.year)[:2]} {dt.hour};{dt.minute};{dt.second}]'
+            self.result_dir = join(self.hw_dir, config.report_folder_name + ' ' + timestamp)
             os.mkdir(self.result_dir)
 
-            self.key_dir = join(self.hw_dir, f'HW{hw_num}Key')
-
         except FileNotFoundError:
-            helper_tools.input.exit_msg(f'Trouble locating directory for hw {hw_num}\n'
+            helper_tools.input.exit_msg(f'Trouble locating directory for HW {hw_num}\n'
                                         f'Please review directory structure in README.txt')
 
         self.students = []
-        for file in os.listdir('.'):
+        for file in os.listdir(self.download_dir):
             if file.count('_') > 2:
-                self.students.append(''.join(file.split('_')[0:3]))
+                self.students.append('_'.join(file.split('_')[0:3]))
+
+        self.students = list(set(self.students))
 
         for student in self.students:
             os.mkdir(join(self.result_dir, student))

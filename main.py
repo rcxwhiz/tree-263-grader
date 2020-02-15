@@ -63,8 +63,9 @@ def xlsx_grader(hw):
 if __name__ == '__main__':
     helper_tools.input.validate_args(sys.argv)
     if sys.argv[2] == 'py':
-        navi = helper_tools.navigation.Dirs(sys.argv[1])
-        helper_tools.files.run_key()
+        helper_tools.input.initialize_files(sys.argv[1])
+        navi = helper_tools.navigation.Dirs()
+        # helper_tools.files.run_key()
         # try:
         #     hw = sys.argv[1]
         #     print('Creating HW directories...')
