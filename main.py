@@ -1,6 +1,4 @@
-import multiprocessing
 import os
-import re
 import sys
 
 import openpyexcel
@@ -64,9 +62,8 @@ def xlsx_grader(hw):
 
 if __name__ == '__main__':
     helper_tools.input.validate_args(sys.argv)
-    helper_tools.files.make_dirs()
     if sys.argv[2] == 'py':
-        print('help')
+        navi = helper_tools.navigation.Dirs(sys.argv[1])
         # try:
         #     hw = sys.argv[1]
         #     print('Creating HW directories...')

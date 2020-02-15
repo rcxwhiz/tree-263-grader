@@ -11,19 +11,6 @@ general_error_msg = 'NO OUTPUT WAS GENERATED\n' \
                     'Check the console for error?'
 
 
-def make_dirs():
-    students = []
-    for file in os.listdir('.'):
-        if file.count('_') > 2:
-            students.append(file.split('_')[0:3])
-    result_dir_name = config.report_folder_name + ' ' + str(datetime.datetime.now())
-    os.mkdir(result_dir_name)
-    result_dir = os.path.join(os.getcwd(), result_dir_name)
-
-    for student in students:
-        os.mkdir(os.path.join(result_dir, student))
-
-
 def run_a_file(file_name, temp_out):
 
     if README.code_running_method == 1:
