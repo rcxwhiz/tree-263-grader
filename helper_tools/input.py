@@ -2,6 +2,7 @@ import os
 import re
 import sys
 
+import helper_tools
 import helper_tools.config_reader as config
 
 
@@ -25,6 +26,8 @@ def validate_args(args):
         exit_msg(f'Valid arguments:\n'
                  f'[hw num] py [prob num]\n'
                  f'[hw num] xlsx')
+
+    dirs = helper_tools.navigation.Dirs(args[1])
 
     try:
         os.chdir(os.path.join(config.hw_directory, 'HW ' + args[1]))
