@@ -6,7 +6,6 @@ import openpyexcel
 import assets.py_ui
 import assets.xlsx_ui
 import helper_tools
-import helper_tools.config_reader as config
 
 
 def xlsx_grader(hw):
@@ -65,7 +64,9 @@ if __name__ == '__main__':
     if sys.argv[2] == 'py':
         helper_tools.input.initialize_files(sys.argv[1])
         navi = helper_tools.navigation.Dirs()
-        # helper_tools.files.run_key()
+        # TODO I think the key dicts need to be loaded and stuff before they can run
+        helper_tools.files.run_key()
+
         # try:
         #     hw = sys.argv[1]
         #     print('Creating HW directories...')
