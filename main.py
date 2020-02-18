@@ -64,7 +64,9 @@ if __name__ == '__main__':
     if sys.argv[2] == 'py':
         helper_tools.input.initialize_files(sys.argv[1])
         navi = helper_tools.navigation.Dirs()
-        # TODO I think the key dicts need to be loaded and stuff before they can run
+
+        helper_tools.files.initialize_results()
+
         helper_tools.files.run_key()
 
         # try:
