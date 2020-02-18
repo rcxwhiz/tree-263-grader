@@ -5,6 +5,7 @@ import os
 import shutil
 from os.path import join
 from typing import Optional
+from pathlib import Path
 
 import helper_tools.config_reader as config
 import helper_tools.input
@@ -27,6 +28,8 @@ class Dirs(metaclass=DirsMeta):
         self.result_dir = None
         self.key_dir = None
         self.students = None
+        self.project_dir = Path(os.path.dirname(os.path.realpath(__file__)))
+        self.scripts = join(str(self.project_dir.parent), 'scripts')
 
     def create_members(self, hw_num):
         print('Creating directories...')
@@ -41,7 +44,7 @@ class Dirs(metaclass=DirsMeta):
                     self.download_dir = join(self.hw_dir, file)
                     break
 
-            self.key_dir = join(self.hw_dir, f'hw{hw_num}key')
+            self.key_dir = join(self.hw_dir, f'HW{hw_num}Key')
 
             for file in os.listdir(self.download_dir):
                 os.rename(join(self.download_dir, file), join(self.download_dir, helper_tools.input.remove_zeros(file)))
