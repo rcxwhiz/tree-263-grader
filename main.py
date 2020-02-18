@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 
 import openpyexcel
@@ -6,6 +7,7 @@ import openpyexcel
 import assets.py_ui
 import assets.xlsx_ui
 import helper_tools
+import helper_tools.config_reader as config
 
 
 def xlsx_grader(hw):
@@ -68,6 +70,10 @@ if __name__ == '__main__':
         helper_tools.files.initialize_results()
 
         helper_tools.files.run_key()
+
+        if config.cleanup_report:
+            print('Deleting report directory...')
+            shutil.rmtree(navi.result_dir)
 
         # try:
         #     hw = sys.argv[1]
