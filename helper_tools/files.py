@@ -99,6 +99,7 @@ def run_a_file(py_file, out_file):
     os.remove(temp_script_name)
 
 
+# TODO can't tell if aynthing is using thi, it looks a little outdated
 def get_py_files():
     all_files = os.listdir('.')
     all_py_files = []
