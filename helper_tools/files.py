@@ -32,25 +32,26 @@ def initialize_results():
     # get key files
     for file in os.listdir(navi.key_dir):
         if file.endswith('.py'):
-            try:
-                source = open(file, 'r').read()
-            except UnicodeDecodeError:
-                source = unicode_error_msg
-            key_list.append({'source': source, 'file name': file})
+            source = read_file(join(navi.key_dir, file))
+            key_list.append({'source': source,
+                             'file name': file,
+                             'file path': join(navi.key_dir, file)})
 
     # get student files
     for stud_name in navi.students:
         stud_dict[stud_name] = []
         for file in os.listdir(join(navi.result_dir, stud_name)):
             if file.endswith('.py'):
-                try:
-                    source = open(file, 'r').read()
-                except UnicodeDecodeError:
-                    source = unicode_error_msg
-                stud_dict[stud_name].append({'source': source, 'file name': file})
+                source = read_file(join(navi.result_dir, stud_name, file))
+                stud_dict[stud_name].append({'source': source,
+                                             'file name': file,
+                                             'file path': join(navi.result_dir, stud_name, file)})
+
+    results.populate(key_list, stud_dict)
 
 
 def run_files(dicts):
+    # takes a list of dictionaries to run so that it can run the right number of threads easier
     base_threads = threading.active_count()
     if config.max_concurrent_programs == 0:
         max_threads = 10000
@@ -65,6 +66,7 @@ def run_files(dicts):
                                             args=(join(dict_obj['file path'], dict_obj['file name']),
                                                   dict_obj['file name'] + config.file_out_name)))
             threads[-1].start()
+            num_run += 1
 
     for thread in threads:
         thread.join()
@@ -77,6 +79,14 @@ def run_files(dicts):
 
 def run_key():
     run_files(results.key_files)
+
+
+def run_student_files():
+    all_files = []
+    for student in results.student_files.keys():
+        all_files.append(results.student_files[student])
+
+    run_files(all_files)
 
 
 def run_a_file(py_file, out_file):
