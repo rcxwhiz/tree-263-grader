@@ -69,7 +69,11 @@ if __name__ == '__main__':
 
         helper_tools.files.initialize_results()
 
+        print('Running key...')
         helper_tools.files.run_key()
+
+        print('Running student files...')
+        helper_tools.files.run_student_files()
 
         if config.cleanup_report:
             print('Deleting report directory...')

@@ -56,12 +56,14 @@ def run_files(dicts):
     # takes a list of dictionaries to run so that it can run the right number of threads easier
     base_threads = threading.active_count()
     if config.max_concurrent_programs == 0:
-        max_threads = 10000
+        max_threads = 1e9
     else:
         max_threads = base_threads + config.max_concurrent_programs
     num_run = 0
     threads = []
+    print('')
     while num_run < len(dicts):
+        # print(f'\r\rThread count: {threading.active_count()}{" " * 10}')
         if threading.active_count() < max_threads:
             dict_obj = dicts[num_run]
             full_file_out = dict_obj['file path'][:-3] + '-' + config.file_out_name
@@ -87,44 +89,23 @@ def run_key():
 def run_student_files():
     all_files = []
     for student in results.student_files.keys():
-        all_files.append(results.student_files[student])
+        for file in results.student_files[student]:
+            all_files.append(file)
 
     run_files(all_files)
 
 
 def run_a_file(py_file, out_file):
-    # TODO need to put an ABSOLUTE PATH for the outfile
     navi = helper_tools.navigation.Dirs()
     script_prefix = open(join(navi.scripts, 'exit-script-beginning.txt'), 'r').read()
-    student_script = open(py_file, 'r').read()
+    student_script = read_file(py_file)
     script_postfix = open(join(navi.scripts, 'exit-script-end.txt'), 'r').read()
     temp_script_name = py_file[:-3] + '-MODIFIED.py'
+
+    if 'input(' in student_script or 'input (' in student_script:
+        open(out_file, 'w').write(input_error_msg)
+        return
+
     open(temp_script_name, 'w').write(script_prefix + student_script + script_postfix)
     os.system(f'python "{temp_script_name}" > "{out_file}" 2>&1')
     os.remove(temp_script_name)
-
-
-# TODO can't tell if aynthing is using this, it looks a little outdated
-# def get_py_files():
-#     all_files = os.listdir('.')
-#     all_py_files = []
-#     for file in all_files:
-#         if file.endswith('.py'):
-#             all_py_files.append(file)
-#
-#     student_file_groups = {}
-#
-#     for file_name in all_py_files:
-#         student_name = file_name.split('_')[1] + ' ' + file_name.split('_')[0]
-#         netid = file_name.split('_')[2]
-#         try:
-#             source_code = open(file_name, 'r').read().replace('\t', ' ' * 4)
-#         except UnicodeDecodeError:
-#             source_code = unicode_error_msg
-#         file_dict = {'name': student_name, 'net id': netid, 'source code': source_code, 'file name': file_name}
-#         if student_name in student_file_groups.keys():
-#             student_file_groups[student_name].append(file_dict)
-#         else:
-#             student_file_groups[student_name] = [file_dict]
-#
-#     return student_file_groups
