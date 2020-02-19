@@ -94,7 +94,7 @@ def run_student_files():
 
 def run_a_file(py_file, out_file):
     navi = helper_tools.navigation.Dirs()
-    script_prefix = open(join(navi.scripts, 'exit-script-beginning.txt'), 'r').read()
+    script_prefix = open(join(navi.scripts, 'exit-script-beginning.txt'), 'r').read().replace('TIME BEFORE KILL HERE', str(config.max_prog_time))
     student_script = read_file(py_file)
     script_postfix = open(join(navi.scripts, 'exit-script-end.txt'), 'r').read()
     temp_script_name = py_file[:-3] + '-MODIFIED.py'
