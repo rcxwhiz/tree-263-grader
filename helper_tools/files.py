@@ -16,11 +16,7 @@ results = helper_tools.StudentResults.PythonResults()
 
 
 def read_file(file):
-    # TODO could be doing this in a different order
-    try:
-        return open(file, 'r').read()
-    except UnicodeDecodeError:
-        return unicode_error_msg
+    return open(file, 'rt', encoding='utf-8').read()
 
 
 def initialize_results():
@@ -103,6 +99,6 @@ def run_a_file(py_file, out_file):
         open(out_file, 'w').write(input_error_msg)
         return
 
-    open(temp_script_name, 'w').write(script_prefix + student_script + script_postfix)
+    open(temp_script_name, 'w', encoding='utf-8').write(script_prefix + student_script + script_postfix)
     os.system(f'python "{temp_script_name}" > "{out_file}" 2>&1')
     os.remove(temp_script_name)
