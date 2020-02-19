@@ -54,9 +54,7 @@ def run_files(dicts):
         max_threads = base_threads + config.max_concurrent_programs
     num_run = 0
     threads = []
-    print('')
     while num_run < len(dicts):
-        # print(f'\r\rThread count: {threading.active_count()}{" " * 10}')
         if threading.active_count() < max_threads:
             dict_obj = dicts[num_run]
             full_file_out = dict_obj['file path'][:-3] + '-' + config.file_out_name

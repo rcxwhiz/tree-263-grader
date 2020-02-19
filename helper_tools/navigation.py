@@ -78,3 +78,6 @@ class Dirs(metaclass=DirsMeta):
             for file in os.listdir(self.download_dir):
                 if student in file and file.endswith('.py'):
                     shutil.copy(join(self.download_dir, file), join(self.result_dir, student, file))
+            if len(os.listdir(join(self.result_dir, student))) == 0:
+                os.removedirs(join(self.result_dir, student))
+                self.students.remove(student)

@@ -79,6 +79,7 @@ if __name__ == '__main__':
             print('Deleting report directory...')
             shutil.rmtree(navi.result_dir)
 
+        print('Launching UI.')
         assets.py_ui.py_ui()
 
         # try:
