@@ -1,14 +1,10 @@
-import datetime
 import os
-import time
 import threading
-import sys
-
 from os.path import join
+
+import helper_tools.StudentResults
 import helper_tools.config_reader as config
 import helper_tools.navigation
-import helper_tools.StudentResults
-from pathlib import Path
 
 unicode_error_msg = 'UNICODE DECODE ERROR'
 input_error_msg = 'FILE TERMINATED FOR USING INPUT'
@@ -20,6 +16,7 @@ results = helper_tools.StudentResults.PythonResults()
 
 
 def read_file(file):
+    # TODO could be doing this in a different order
     try:
         return open(file, 'r').read()
     except UnicodeDecodeError:

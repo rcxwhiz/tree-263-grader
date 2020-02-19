@@ -5,7 +5,7 @@ import threading
 def kill_prog():
     time.sleep(5)
     print('Program killed after being unresposive.')
-    os._exit(THREADING_TIMER)
+    os._exit(2)
 kill_thread = threading.Thread(target=kill_prog)
 kill_thread.start()
 # ###############################################

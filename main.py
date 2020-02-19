@@ -79,6 +79,8 @@ if __name__ == '__main__':
             print('Deleting report directory...')
             shutil.rmtree(navi.result_dir)
 
+        assets.py_ui.py_ui()
+
         # try:
         #     hw = sys.argv[1]
         #     print('Creating HW directories...')

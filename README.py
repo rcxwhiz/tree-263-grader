@@ -39,7 +39,7 @@ Packages Required:
 Homeork location:
 """
 
-hw_directory = r'C:\Users\josh-laptop\OneDrive\School\CH EN 263 TA'
+hw_directory = r'C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA'
 
 r"""
 Example file path this code is looking for:

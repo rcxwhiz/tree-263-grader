@@ -111,6 +111,7 @@ class Ui_MainWindow(object):
         self.student_sheet_turner.setMaximum(len(self.io_data.student_files[list(self.io_data.student_files.keys())[self.code_index]]))
 
         self.key_label.setText(f'Key - {self.io_data.key_files[self.key_sheet_turner.value() - 1]["file name"]}')
+        # TODO this is broken
         self.student_label.setText(f'{list(self.io_data.student_files.keys())[self.code_index]} - '
                                    f'{self.code_index + 1}/{self.io_data.num_students} - '
                                    f'{self.io_data.student_files[list(self.io_data.student_files.keys())[self.code_index]][self.student_sheet_turner.value() - 1]["file name"]}')
@@ -118,9 +119,9 @@ class Ui_MainWindow(object):
         self.next_file_botton.setText(list(self.io_data.student_files.keys())[(self.code_index + 1) % self.io_data.num_students])
         self.previous_file_button.setText(list(self.io_data.student_files.keys())[self.code_index - 1])
 
-        self.key_source_display.setText(self.io_data.key_files[self.key_sheet_turner.value() - 1]['source code'])
+        self.key_source_display.setText(self.io_data.key_files[self.key_sheet_turner.value() - 1]['source'])
         self.key_out_display.setText(self.io_data.key_files[self.key_sheet_turner.value() - 1]['out'])
-        self.student_source_display.setText(self.io_data.student_files[list(self.io_data.student_files.keys())[self.code_index]][self.student_sheet_turner.value() - 1]['source code'])
+        self.student_source_display.setText(self.io_data.student_files[list(self.io_data.student_files.keys())[self.code_index]][self.student_sheet_turner.value() - 1]['source'])
         self.student_out_display.setText(self.io_data.student_files[list(self.io_data.student_files.keys())[self.code_index]][self.student_sheet_turner.value() - 1]['out'])
 
 
