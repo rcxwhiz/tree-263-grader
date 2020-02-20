@@ -2,6 +2,7 @@ TODO create separate excel grader class thing
 TODO think about a solution to files that generate and show plots
 TODO Improve message for unopened excel files
 TODO find a way to save or display plots that are made on the fly, maybe a saveall plt command?
+TODO it would seem for HW 8 on the laptop 3 seconds isn't enough to run the hw
 
 Josh Bedwell's CH EN 263 Grader
 

@@ -51,7 +51,8 @@ class Dirs(metaclass=DirsMeta):
 
         try:
             for file in os.listdir(self.download_dir):
-                os.rename(join(self.download_dir, file), join(self.download_dir, helper_tools.input.remove_zeros(file)))
+                if file.endswith('.py') or os.path.isdir(file):
+                    os.rename(join(self.download_dir, file), join(self.download_dir, helper_tools.input.remove_zeros(file)))
         except FileNotFoundError:
             helper_tools.input.exit_msg(f'Issue with download directory {self.download_dir}\n'
                                         f'Directory structure given in README.md')
