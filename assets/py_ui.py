@@ -112,7 +112,6 @@ class Ui_MainWindow(object):
 
         self.key_label.setText(f'Key - {self.io_data.key_files[self.key_sheet_turner.value() - 1]["file name"]}')
 
-        # TODO this is broken
         stud_name = self.io_data.student_names[self.code_index]
         stud_file_list = self.io_data.student_files[stud_name]
         stud_file_dict = stud_file_list[self.student_sheet_turner.value() - 1]

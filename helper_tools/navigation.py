@@ -47,7 +47,7 @@ class Dirs(metaclass=DirsMeta):
             helper_tools.input.exit_msg(f'Could not find HW directory {self.hw_dir}\n'
                                         f'Directory structure given in README.md')
 
-            self.key_dir = join(self.hw_dir, f'HW{hw_num}Key')
+        self.key_dir = join(self.hw_dir, f'HW{hw_num}Key')
 
         try:
             for file in os.listdir(self.download_dir):
@@ -61,10 +61,10 @@ class Dirs(metaclass=DirsMeta):
         except FileNotFoundError:
             helper_tools.input.exit_msg(f'Issue with key directory {self.key_dir}\n'
                                         f'Directory structure given in README.md')
-            dt = datetime.now()
-            timestamp = f'[{dt.month}-{dt.day}-{str(dt.year)[:2]} {dt.hour};{dt.minute};{dt.second}]'
-            self.result_dir = join(self.hw_dir, config.report_folder_name + ' ' + timestamp)
-            os.mkdir(self.result_dir)
+        dt = datetime.now()
+        timestamp = f'[{dt.month}-{dt.day}-{str(dt.year)[:2]} {dt.hour};{dt.minute};{dt.second}]'
+        self.result_dir = join(self.hw_dir, config.report_folder_name + ' ' + timestamp)
+        os.mkdir(self.result_dir)
 
         self.students = []
         for file in os.listdir(self.download_dir):
@@ -84,12 +84,15 @@ class Dirs(metaclass=DirsMeta):
             for file in os.listdir(self.download_dir):
                 if student in file and file.endswith('.py'):
                     shutil.copy(join(self.download_dir, file), join(self.result_dir, student, file))
-            if len(os.listdir(join(self.result_dir, student))) == 0:
-                os.removedirs(join(self.result_dir, student))
-                self.students.remove(student)
+
         self.check_for_empty_dirs()
 
     def check_for_empty_dirs(self):
+        bad_studs = []
         for student in self.students:
             if len(os.listdir(join(self.result_dir, student))) == 0:
+                shutil.rmtree(join(self.result_dir, student))
                 print(f'There were no files for {student}')
+                bad_studs.append(student)
+        for bad_stud in bad_studs:
+            self.students.remove(bad_stud)
