@@ -11,6 +11,7 @@ If no arguments are given it will ask for parameters when the program starts.
 
 Limitaions:
 - The package being used for excel files only supports .xlsx files (not .xls etc.)
+- If the students are doing a lot of graphical things that doesn't go so well.
 
 Packages Required:
 - PyQt5
