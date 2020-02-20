@@ -18,6 +18,7 @@ class PythonResults(metaclass=PythonResultsMeta):
         self.key_files = []
         self.student_files = {}
         self.student_names = []
+        self.verbose_student_names = []
         self.num_students = 0
 
     def populate(self, key, students):
@@ -25,6 +26,10 @@ class PythonResults(metaclass=PythonResultsMeta):
         self.student_files = students
         self.student_names = list(self.student_files.keys())
         self.student_names.sort()
+        for name in self.student_names:
+            first_name = name.split('_')[1]
+            last_name = name.split('_')[0]
+            self.verbose_student_names.append(first_name + ' ' + last_name)
         self.num_students = len(students)
 
 

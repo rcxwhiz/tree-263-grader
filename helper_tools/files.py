@@ -6,8 +6,8 @@ import helper_tools.StudentResults
 import helper_tools.config_reader as config
 import helper_tools.navigation
 
-unicode_error_msg = '[GRADER] UNICODE DECODE ERROR'
-input_error_msg = '[GRADER] FILE TERMINATED FOR USING INPUT'
+unicode_error_msg = '[GRADER] - Unicode decode error'
+input_error_msg = '[GRADER] - File terminated for using input'
 general_error_msg = 'NO OUTPUT WAS GENERATED\n' \
                     'THIS MAY HAVE BEEN BECAUSE OF AN ERROR OR LOOP\n' \
                     'Check the console for error?'

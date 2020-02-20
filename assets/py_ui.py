@@ -116,7 +116,7 @@ class Ui_MainWindow(object):
         stud_file_list = self.io_data.student_files[stud_name]
         stud_file_dict = stud_file_list[self.student_sheet_turner.value() - 1]
         file_name = stud_file_dict['file name']
-        self.student_label.setText(f'{self.io_data.student_names[self.code_index]} - '
+        self.student_label.setText(f'{self.io_data.verbose_student_names[self.code_index]} - '
                                    f'{self.code_index + 1}/{self.io_data.num_students} - '
                                    f'{file_name}')
 
