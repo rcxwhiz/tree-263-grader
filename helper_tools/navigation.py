@@ -92,7 +92,7 @@ class Dirs(metaclass=DirsMeta):
         for student in self.students:
             if len(os.listdir(join(self.result_dir, student))) == 0:
                 shutil.rmtree(join(self.result_dir, student))
-                print(f'There were no files for {student}')
+                # print(f'There were no files for {student}')
                 bad_studs.append(student)
         for bad_stud in bad_studs:
             self.students.remove(bad_stud)
