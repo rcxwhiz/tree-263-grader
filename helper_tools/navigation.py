@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from datetime import datetime
 import os
 import shutil
+from datetime import datetime
 from os.path import join
-from typing import Optional
 from pathlib import Path
+from typing import Optional
 
 import helper_tools.config_reader as config
 import helper_tools.input
@@ -81,3 +81,9 @@ class Dirs(metaclass=DirsMeta):
             if len(os.listdir(join(self.result_dir, student))) == 0:
                 os.removedirs(join(self.result_dir, student))
                 self.students.remove(student)
+        self.check_for_empty_dirs()
+
+    def check_for_empty_dirs(self):
+        for student in self.students:
+            if len(os.listdir(join(self.result_dir, student))) == 0:
+                print(f'There were no files for {student}')

@@ -1,3 +1,4 @@
+# TODO a random 3 students are not going to have any files copied for some reason
 # TODO think about a solution to files that generate and show plots
 # TODO Improve message for unopened excel files
 # TODO find a way to save or display plots that are made on the fly, maybe a saveall plt command?

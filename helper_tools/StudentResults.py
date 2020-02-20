@@ -17,11 +17,14 @@ class PythonResults(metaclass=PythonResultsMeta):
     def __init__(self):
         self.key_files = []
         self.student_files = {}
+        self.student_names = []
         self.num_students = 0
 
     def populate(self, key, students):
         self.key_files = key
         self.student_files = students
+        self.student_names = list(self.student_files.keys())
+        self.student_names.sort()
         self.num_students = len(students)
 
 
