@@ -33,32 +33,38 @@ class Dirs(metaclass=DirsMeta):
 
     def create_members(self, hw_num):
         print('Creating directories...')
+        self.class_dir = config.hw_directory
+
+        self.hw_dir = join(self.class_dir, f'HW {hw_num}')
+
+        self.download_dir = ''
         try:
-            self.class_dir = config.hw_directory
-
-            self.hw_dir = join(self.class_dir, f'HW {hw_num}')
-
-            self.download_dir = ''
             for file in os.listdir(self.hw_dir):
                 if 'Gradebook Bundled Download' in file:
                     self.download_dir = join(self.hw_dir, file)
                     break
+        except FileNotFoundError:
+            helper_tools.input.exit_msg(f'Could not find HW directory {self.hw_dir}\n'
+                                        f'Directory structure given in README.md')
 
             self.key_dir = join(self.hw_dir, f'HW{hw_num}Key')
 
+        try:
             for file in os.listdir(self.download_dir):
                 os.rename(join(self.download_dir, file), join(self.download_dir, helper_tools.input.remove_zeros(file)))
+        except FileNotFoundError:
+            helper_tools.input.exit_msg(f'Issue with download directory {self.download_dir}\n'
+                                        f'Directory structure given in README.md')
+        try:
             for file in os.listdir(self.key_dir):
                 os.rename(join(self.key_dir, file), join(self.key_dir, helper_tools.input.remove_zeros(file)))
-
+        except FileNotFoundError:
+            helper_tools.input.exit_msg(f'Issue with key directory {self.key_dir}\n'
+                                        f'Directory structure given in README.md')
             dt = datetime.now()
             timestamp = f'[{dt.month}-{dt.day}-{str(dt.year)[:2]} {dt.hour};{dt.minute};{dt.second}]'
             self.result_dir = join(self.hw_dir, config.report_folder_name + ' ' + timestamp)
             os.mkdir(self.result_dir)
-
-        except FileNotFoundError:
-            helper_tools.input.exit_msg(f'Trouble locating directory for HW {hw_num}\n'
-                                        f'Please review directory structure in README.txt')
 
         self.students = []
         for file in os.listdir(self.download_dir):
