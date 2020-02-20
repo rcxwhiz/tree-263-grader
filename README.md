@@ -1,6 +1,7 @@
-# TODO think about a solution to files that generate and show plots
-# TODO Improve message for unopened excel files
-# TODO find a way to save or display plots that are made on the fly, maybe a saveall plt command?
+TODO create separate excel grader class thing
+TODO think about a solution to files that generate and show plots
+TODO Improve message for unopened excel files
+TODO find a way to save or display plots that are made on the fly, maybe a saveall plt command?
 
 Josh Bedwell's CH EN 263 Grader
 

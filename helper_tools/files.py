@@ -97,6 +97,6 @@ def run_a_file(py_file, out_file):
         open(out_file, 'w').write(input_error_msg)
         return
 
-    open(temp_script_name, 'w', encoding='utf-8').write(script_prefix + student_script + script_postfix)
+    open(temp_script_name, 'w', encoding='utf-8').write((script_prefix + student_script + script_postfix).replace('TIME BEFORE KILL HERE', str(config.max_prog_time)))
     os.system(f'python "{temp_script_name}" > "{out_file}" 2>&1')
     os.remove(temp_script_name)
