@@ -25,7 +25,9 @@ hw_directory = r'C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA'
 
 Example file path this code is looking for:
   C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA\HW 2\Gradebook Bundled Download - Jan 22 2020\
-  C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA\HW 2\HW2Key
+  C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA\HW 2\HW2Key\
+  if there is data:
+  C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA\HW 2\DATA\
 hw_directory variable given:
   r'C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA'
 Where the student .py and .xlsx files are in the bundled download folder, and the answer key .py and .xlsx files are in

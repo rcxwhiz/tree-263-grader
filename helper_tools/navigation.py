@@ -28,14 +28,15 @@ class Dirs(metaclass=DirsMeta):
         self.result_dir = None
         self.key_dir = None
         self.students = None
+        self.data_dir = None
         self.project_dir = Path(os.path.dirname(os.path.realpath(__file__)))
         self.scripts = join(str(self.project_dir.parent), 'scripts')
 
     def create_members(self, hw_num):
         if config.del_ouput_files:
-            print('Script output files will be deleted')
+            print('Script output files will be deleted after scripts run')
         else:
-            print('Script output files will not be deleted')
+            print('Script output files will not be deleted after scripts run')
         if config.cleanup_report:
             print('Report directory will be deleted when program ends')
         else:
@@ -60,8 +61,7 @@ class Dirs(metaclass=DirsMeta):
 
         try:
             for file in os.listdir(self.download_dir):
-                if file.endswith('.py') or os.path.isdir(file):
-                    os.rename(join(self.download_dir, file), join(self.download_dir, helper_tools.input.remove_zeros(file)))
+                os.rename(join(self.download_dir, file), join(self.download_dir, helper_tools.input.remove_zeros(file)))
         except FileNotFoundError:
             helper_tools.input.exit_msg(f'Issue with download directory {self.download_dir}\n'
                                         f'Directory structure given in README.md')
@@ -86,14 +86,22 @@ class Dirs(metaclass=DirsMeta):
         for student in self.students:
             os.mkdir(join(self.result_dir, student))
 
+        if os.path.exists(join(self.hw_dir, 'DATA')):
+            self.data_dir = join(self.hw_dir, 'DATA')
+
         print('Moving student files...')
         self._populate_student_dirs()
 
     def _populate_student_dirs(self):
         for student in self.students:
+            # Put student .py files into folders
             for file in os.listdir(self.download_dir):
                 if student in file and file.endswith('.py'):
                     shutil.copy(join(self.download_dir, file), join(self.result_dir, student, file))
+            # Give each student a copy of the data
+            if self.data_dir is not None:
+                for file in os.listdir(self.data_dir):
+                    shutil.copy(join(self.data_dir, file), join(self.result_dir, student, file))
 
         self.check_for_empty_dirs()
 

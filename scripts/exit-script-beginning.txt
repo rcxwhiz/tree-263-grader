@@ -1,5 +1,6 @@
 # EXIT SCRIPT ###################################
 import os
+import sys
 import time
 import threading
 def kill_prog():
@@ -8,5 +9,6 @@ def kill_prog():
     os._exit(2)
 kill_thread = threading.Thread(target=kill_prog)
 kill_thread.start()
+os.chdir(os.path.dirname(sys.argv[0]))
 # ###############################################
 
