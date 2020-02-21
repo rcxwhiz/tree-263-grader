@@ -2,17 +2,17 @@ import os
 import threading
 from os.path import join
 
-import helper_tools.StudentResults
 import helper_tools.config_reader as config
 import helper_tools.navigation
+import helper_tools.student_results
 
-unicode_error_msg = '[GRADER] - Unicode decode error'
-input_error_msg = '[GRADER] - File terminated for using input'
-general_error_msg = 'NO OUTPUT WAS GENERATED\n' \
-                    'THIS MAY HAVE BEEN BECAUSE OF AN ERROR OR LOOP\n' \
-                    'Check the console for error?'
+error_msgs = {'unicode': '\n[GRADER] - Unicode decode error',
+              'input': '\n[GRADER] - File terminated for using input',
+              'long out': f'\n[GRADER] - File output was cut off because it is longer than {config.max_out_lines} '
+                          f'lines\nThe full output is located in the output file for this script '
+                          f'(if it is not set to be deleted)'}
 
-results = helper_tools.StudentResults.PythonResults()
+results = helper_tools.student_results.PythonResults()
 
 
 def read_file(file):
@@ -68,7 +68,13 @@ def run_files(dicts):
         thread.join()
     for dict_obj in dicts:
         full_file_out = dict_obj['file path'][:-3] + '-' + config.file_out_name
-        dict_obj['out'] = read_file(full_file_out)
+
+        output = read_file(full_file_out)
+        output_by_lines = output.split('\n')
+        if len(output_by_lines) > config.max_out_lines:
+            output = '\n'.join(output_by_lines[:config.max_out_lines]) + error_msgs['long out']
+
+        dict_obj['out'] = output
         if config.del_ouput_files:
             os.remove(full_file_out)
 
@@ -94,7 +100,7 @@ def run_a_file(py_file, out_file):
     temp_script_name = py_file[:-3] + '-MODIFIED.py'
 
     if 'input(' in student_script or 'input (' in student_script:
-        open(out_file, 'w').write(input_error_msg)
+        open(out_file, 'w').write(error_msgs['input'])
         return
 
     open(temp_script_name, 'w', encoding='utf-8').write((script_prefix + student_script + script_postfix).replace('TIME BEFORE KILL HERE', str(config.max_prog_time)))

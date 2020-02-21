@@ -15,7 +15,7 @@ import helper_tools
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         self.stud_index = 0
-        self.excel_data = helper_tools.StudentResults.ExcelResults()
+        self.excel_data = helper_tools.student_results.ExcelResults()
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1404, 882)

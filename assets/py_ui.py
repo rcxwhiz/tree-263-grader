@@ -13,7 +13,7 @@ import helper_tools
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         self.code_index = 0
-        self.io_data = helper_tools.StudentResults.PythonResults()
+        self.io_data = helper_tools.student_results.PythonResults()
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1404, 882)

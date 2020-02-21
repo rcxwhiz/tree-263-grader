@@ -32,6 +32,15 @@ class Dirs(metaclass=DirsMeta):
         self.scripts = join(str(self.project_dir.parent), 'scripts')
 
     def create_members(self, hw_num):
+        if config.del_ouput_files:
+            print('Script output files will be deleted')
+        else:
+            print('Script output files will not be deleted')
+        if config.cleanup_report:
+            print('Report directory will be deleted when program ends')
+        else:
+            print('Report directory will not be deleted when program ends')
+
         print('Creating directories...')
         self.class_dir = config.hw_directory
 
