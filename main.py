@@ -75,12 +75,13 @@ if __name__ == '__main__':
         print('Running student files...')
         helper_tools.files.run_student_files()
 
+        print('Launching UI')
+        assets.py_ui.py_ui()
+
+        # TODO I want this to run AFTER the ui closes
         if config.cleanup_report:
             print('Deleting report directory...')
             shutil.rmtree(navi.result_dir)
-
-        print('Launching UI')
-        assets.py_ui.py_ui()
 
     if sys.argv[2] == 'xlsx':
 

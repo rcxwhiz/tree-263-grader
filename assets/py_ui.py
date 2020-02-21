@@ -136,7 +136,8 @@ def py_ui():
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    sys.exit(app.exec_())
+    app.exec_()
+    # sys.exit(app.exec_())
 
 
 if __name__ == "__main__":
