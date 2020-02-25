@@ -27,7 +27,7 @@ def initialize_results():
     # get key files
     for file in os.listdir(navi.key_dir):
         if file.endswith('.py'):
-            source = read_file(join(navi.key_dir, file))
+            source = read_file(join(navi.key_dir, file)).replace('\t', ' ' * 4)
             key_list.append({'source': source,
                              'file name': file,
                              'file path': join(navi.key_dir, file)})
@@ -37,7 +37,7 @@ def initialize_results():
         stud_dict[stud_name] = []
         for file in os.listdir(join(navi.result_dir, stud_name)):
             if file.endswith('.py'):
-                source = read_file(join(navi.result_dir, stud_name, file))
+                source = read_file(join(navi.result_dir, stud_name, file)).replace('\t', ' ' * 4)
                 stud_dict[stud_name].append({'source': source,
                                              'file name': file,
                                              'file path': join(navi.result_dir, stud_name, file)})
