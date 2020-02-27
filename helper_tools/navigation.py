@@ -103,6 +103,8 @@ class Dirs(metaclass=DirsMeta):
                 for file in os.listdir(self.data_dir):
                     shutil.copy(join(self.data_dir, file), join(self.result_dir, student, file))
 
+        # TODO this is the spot where it needs to ask what other files to add in
+
         self.check_for_empty_dirs()
 
     def check_for_empty_dirs(self):
