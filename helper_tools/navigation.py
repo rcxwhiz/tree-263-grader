@@ -93,19 +93,57 @@ class Dirs(metaclass=DirsMeta):
         self._populate_student_dirs()
 
     def _populate_student_dirs(self):
+        extra_file_types = {}
+
         for student in self.students:
             # Put student .py files into folders
             for file in os.listdir(self.download_dir):
                 if student in file and file.endswith('.py'):
                     shutil.copy(join(self.download_dir, file), join(self.result_dir, student, file))
-            # Give each student a copy of the data
+
+        self.check_for_empty_dirs()
+
+        # Give the student a copy of the data after we have checked if things are empty
+        for student in self.students:
+            student_types = set()
+            for file in os.listdir(self.download_dir):
+                # Grab the other file types
+                if student in file:
+                    ext = '.' + str(file.split('.')[-1])
+                    if ext == file or ext == '.py':
+                        continue
+                    student_types.add(ext)
+
+            # Add the extra file types from the student into the total
+            for ext in student_types:
+                if ext not in extra_file_types.keys():
+                    extra_file_types[ext] = 1
+                else:
+                    extra_file_types[ext] += 1
+
             if self.data_dir is not None:
                 for file in os.listdir(self.data_dir):
                     shutil.copy(join(self.data_dir, file), join(self.result_dir, student, file))
 
-        # TODO this is the spot where it needs to ask what other files to add in
+        # ask and put the extra files in
+        if config.ask_for_other_files:
+            self.print_extras(extra_file_types)
+            for ext in extra_file_types.keys():
+                response = input(f'Include {ext}? (y/n)\n')
+                if response.lower() == 'y':
+                    for file in os.listdir(self.download_dir):
+                        for student in self.students:
+                            if student in file and file.endswith(ext):
+                                shutil.copy(join(self.download_dir, file), join(self.result_dir, student, file))
+            print()
 
-        self.check_for_empty_dirs()
+    def print_extras(self, dict_in):
+        print('\nExtra types students submitted:')
+        if not bool(dict_in):
+            print('Only py types submitted')
+        else:
+            for ext in dict_in.keys():
+                print(f'{ext} - {dict_in[ext]}/{len(self.students)} ({dict_in[ext] / len(self.students) * 100:.1f}%)')
 
     def check_for_empty_dirs(self):
         bad_studs = []
