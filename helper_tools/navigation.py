@@ -86,8 +86,8 @@ class Dirs(metaclass=DirsMeta):
         for student in self.students:
             os.mkdir(join(self.result_dir, student))
 
-        if os.path.exists(join(self.hw_dir, 'DATA')):
-            self.data_dir = join(self.hw_dir, 'DATA')
+        if os.path.exists(join(self.hw_dir, f'HW{hw_num}Data')):
+            self.data_dir = join(self.hw_dir, f'HW{hw_num}Data')
 
         print('Moving student files...')
         self._populate_student_dirs()

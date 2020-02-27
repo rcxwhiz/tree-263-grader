@@ -1,8 +1,16 @@
+**TO RUN THIS PROJECT**
+
+- Download and unzip the project
+- Run main.py with Python 3.7+
+
+
+TODO figure out where there is an issue with HW 8 crashing on view
+
 TODO create separate excel grader class thing
-TODO think about a solution to files that generate and show plots
+
+TODO think about a solution to files that generate and show plots (maybe a saveall plt command?)
+
 TODO Improve message for unopened excel files
-TODO find a way to save or display plots that are made on the fly, maybe a saveall plt command?
-TODO it would seem for HW 8 on the laptop 3 seconds isn't enough to run the hw
 
 Josh Bedwell's CH EN 263 Grader
 
@@ -23,13 +31,19 @@ Homeork location:
 
 hw_directory = r'C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA'
 
-Example file path this code is looking for:
+Example file path for a HW assignment:
+  
   C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA\HW 2\Gradebook Bundled Download - Jan 22 2020\
+  
   C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA\HW 2\HW2Key\
+  
   if there is data:
-  C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA\HW 2\DATA\
+  C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA\HW 2\HW2Data\
+  
 hw_directory variable given:
+  
   r'C:\Users\josh-desktop\OneDrive\School\CH EN 263 TA'
+
 Where the student .py and .xlsx files are in the bundled download folder, and the answer key .py and .xlsx files are in
 the HW2Key folder.
 
