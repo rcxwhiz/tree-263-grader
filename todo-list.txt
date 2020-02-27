@@ -1,0 +1,5 @@
+TODO be able to specify what file types to copy, mayb ehave some screen with a statistic on what perecent of students are submitting what types
+TODO figure out where there is an issue with HW 8 crashing on view
+TODO create separate excel grader class thing
+TODO think about a solution to files that generate and show plots (maybe a saveall plt command?)
+TODO Improve message for unopened excel files

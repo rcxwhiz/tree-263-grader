@@ -3,15 +3,6 @@
 - Download and unzip the project
 - Run main.py with Python 3.7+
 
-
-TODO figure out where there is an issue with HW 8 crashing on view
-
-TODO create separate excel grader class thing
-
-TODO think about a solution to files that generate and show plots (maybe a saveall plt command?)
-
-TODO Improve message for unopened excel files
-
 Josh Bedwell's CH EN 263 Grader
 
 This program runs and displays python or excel files in the when they are in the format that students submit
