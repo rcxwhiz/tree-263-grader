@@ -1,6 +1,9 @@
 import configparser
 
 reader = configparser.ConfigParser()
+
+# TODO set working directory so that config file could be read
+
 reader.read('config.ini')
 
 run_code = reader.getboolean('Code Runtime', 'run_code')
