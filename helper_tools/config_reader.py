@@ -1,8 +1,10 @@
 import configparser
+import os
+import sys
 
 reader = configparser.ConfigParser()
 
-# TODO set working directory so that config file could be read
+os.chdir(os.path.dirname(sys.argv[0]))
 
 reader.read('config.ini')
 
