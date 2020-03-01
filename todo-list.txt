@@ -1,3 +1,7 @@
+TODO copy data files to key
+TODO display number ofcodes running
+TODO redo UI so that it can show graphs (maybe make it so it can choose)
+TODO save all the students graphs as individual pngs that say things like allysa...hw6a-GRAPH1.png
 TODO create separate excel grader class thing
 TODO think about a solution to files that generate and show plots (maybe a saveall plt command?)
 TODO Improve message for unopened excel files
