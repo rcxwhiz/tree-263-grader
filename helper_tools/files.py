@@ -54,7 +54,14 @@ def run_files(dicts):
         max_threads = base_threads + config.max_concurrent_programs
     num_run = 0
     threads = []
+    print('')
+    if max_threads == 1e9:
+        max_print = 'inf'
+    else:
+        max_print = max_threads
     while num_run < len(dicts):
+        # TODO this is pretty broken
+        print(f'\r{num_run}/{len(dicts)} run - {threading.active_count() - base_threads}/{max_print} active{" " * 15}')
         if threading.active_count() < max_threads:
             dict_obj = dicts[num_run]
             full_file_out = dict_obj['file path'][:-3] + '-' + config.file_out_name
@@ -66,6 +73,8 @@ def run_files(dicts):
 
     for thread in threads:
         thread.join()
+
+    print('\nFinshed')
     for dict_obj in dicts:
         full_file_out = dict_obj['file path'][:-3] + '-' + config.file_out_name
 

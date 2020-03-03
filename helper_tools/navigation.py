@@ -129,7 +129,7 @@ class Dirs(metaclass=DirsMeta):
         if config.ask_for_other_files:
             self.print_extras(extra_file_types)
             for ext in extra_file_types.keys():
-                response = input(f'Include {ext}? (y/n)\n')
+                response = input(f'Include {ext} in output directories? (y/n)\n')
                 if response.lower() == 'y':
                     for file in os.listdir(self.download_dir):
                         for student in self.students:
